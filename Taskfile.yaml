@@ -1,0 +1,17 @@
+
+# https://taskfile.dev
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+
+  cenv:create:
+    desc: _
+    cmds:
+      - mamba create -y -n allip python=3.10 ipython jupyter pillow opencv gst-plugins-base gst-plugins-good gstreamer
