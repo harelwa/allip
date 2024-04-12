@@ -1,0 +1,38 @@
+# Global directories
+__pycache__/
+
+# Global files
+*.py[cod]
+*.dll
+*.so
+*.log
+*.swp
+
+# Root directories
+/.benchmarks/
+/.env/
+/.idea/
+/.mypy_cache/
+/.pytest_cache/
+/.vscode/settings.json
+/dist/
+/site/
+/public/
+
+# Root files
+/.coverage*
+
+# Tasker
+.task
+
+outputs
+tmp/*
+
+# tests and dev data
+_local_store/
+
+.lh**
+/multirun/*
+
+# build
+/out
