@@ -1,50 +1,55 @@
-/**
- * Array.
- *
- * An array is a list of data. Each piece of data in an array
- * is identified by an index number representing its position in
- * the array. Arrays are zero based, which means that the first
- * element in the array is [0], the second element is [1], and so on.
- * In this example, an array named "coswave" is created and
- * filled with the cosine values. This data is displayed three
- * separate ways on the screen.
- */
-
-
-float[] coswave;
-
+import processing.video.*;
+int time;
+Movie myMovie; // Declare movie variable
+int locx=0;
+int locy=0;
 void setup() {
-  size(640, 360);
-  coswave = new float[width];
-  for (int i = 0; i < width; i++) {
-    float amount = map(i, 0, width, 0, PI);
-    coswave[i] = abs(cos(amount));
-  }
-  background(255);
-  noLoop();
+  // fullScreen(P2D, 1);
+  size(720,720);
+  print(width);
+  print(height);
+  // Initial setup for your Processing sketch
+  //size(100, 100); // Set the size of the window
+  myMovie = new Movie(this, "a.mov"); // Load the video file
+  myMovie.play(); // Start playing the video
+  
+  // Position the sketch window on a specific screen (e.g., secondary monitor)
+  // You may need to adjust these values based on your screen setup
+  //int sketchX = 1920; // X position (for a dual monitor setup where the primary monitor is 1920 pixels wide)
+  //int sketchY = 0; // Y position
+  //surface.setLocation(0, sketchY); // Set the location of the sketch window
+  time=millis();
 }
 
 void draw() {
-
-  int y1 = 0;
-  int y2 = height/3;
-  for (int i = 0; i < width; i++) {
-    stroke(coswave[i]*255);
-    line(i, y1, i, y2);
+    time=millis();
+//  if ((millis()-time)>400){time=millis();locx=locx+50;println('x');println(locx);println(locy);
+//  if ((locx>800)){locx=0;locy=locy+50;}
+//}
+//  background(0);
+  if (myMovie.available() == true) {
+    myMovie.read(); // Read new frame
   }
-
-  y1 = y2;
-  y2 = y1 + y1;
-  for (int i = 0; i < width; i++) {
-    stroke(coswave[i]*255 / 4);
-    line(i, y1, i, y2);
-  }
-
-  y1 = y2;
-  y2 = height;
-  for (int i = 0; i < width; i++) {
-    stroke(255 - coswave[i]*255);
-    line(i, y1, i, y2);
-  }
-
+  image(myMovie,0,0,480,720);
+  //image(myMovie, 596,308,96,96); // A
+//  //image(myMovie, locx,locy,96,96); 
+//    //image(myMovie, 500,404,96,96); //B
+//    image(myMovie, 596,20,96,96); //C
+println(millis()-time);
 }
+
+// Called every time a new frame is available to read
+void movieEvent(Movie m) {
+  m.read();
+}
+// import java.io.File;
+
+// void setup() {
+//   String folder = "data";
+//   String filename = "myfile.txt";
+//   File file = new File(folder, filename);
+  
+//   println("Path: " + file.getPath());
+//   println("Absolute Path: " + file.getAbsolutePath());
+//   println("Exists: " + file.exists());
+// }
