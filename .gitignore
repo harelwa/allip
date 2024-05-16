@@ -36,3 +36,7 @@ _local_store/
 
 # build
 /out
+
+# DATA
+
+*.mov
