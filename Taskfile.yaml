@@ -15,3 +15,11 @@ tasks:
     desc: _
     cmds:
       - mamba create -y -n allip python=3.10 ipython jupyter pillow opencv gst-plugins-base gst-plugins-good gstreamer
+
+
+  pr:run-remote:
+    cmds:
+      - /home/altar/Downloads/processing-4.3/processing-java --sketch=/home/altar/Downloads/luli/ --output=/tmp/processing/test --force --run
+    env:
+      DISPLAY: 0
+    desc: _ 
