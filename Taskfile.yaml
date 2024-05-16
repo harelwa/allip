@@ -19,7 +19,7 @@ tasks:
 
   pr:run-remote:
     cmds:
-      - /home/altar/Downloads/processing-4.3/processing-java --sketch=/home/altar/Downloads/luli/ --output=/tmp/processing/test --force --run
+      - processing-java --sketch=$(realpath .) --output=/tmp/processing/test --force --run
     env:
-      DISPLAY: 0
+      DISPLAY: ":0"
     desc: _ 
