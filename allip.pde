@@ -80,7 +80,13 @@ void draw() {
 
     // Display the lower half of the video without scaling
     image(myMovie, 0, 96, 96, 96, 0, 96, 96, 192);
-    
+
+    // calibration results by ROI.AMIT (PRINCE)
+    //image(myMovie, 596,308,96,96);    //A ??
+    //image(myMovie, 500,404,96,96);    //B ??
+    // image(myMovie, 596,20,96,96);    //C ??
+    //image(myMovie, locx,locy,96,96);  //  ??
+ 
 }
 
 // Called every time a new frame is available to read
