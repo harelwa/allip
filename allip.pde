@@ -1,55 +1,157 @@
 import processing.video.*;
+
 int time;
-Movie myMovie; // Declare movie variable
-int locx=0;
-int locy=0;
+Movie myMovie;
+int locx = 0;
+int locy = 0;
+
+// Variables for the videos folder
+String homeDir = System.getProperty("user.home");
+String videosFolderMac = homeDir + "/Documents/works.and.docs/2024.amot/pawns.court/altar.aleph/exports/";
+String videosFolderPi = homeDir + "/Documents/works.and.docs/2024.amot/pawns.court/altar.aleph/exports/";  // TODO: FIXME
+String videosFolder;
+
 void setup() {
-  // fullScreen(P2D, 1);
-  size(720,720);
-  print(width);
-  print(height);
-  // Initial setup for your Processing sketch
-  //size(100, 100); // Set the size of the window
-  myMovie = new Movie(this, "a.mov"); // Load the video file
-  myMovie.play(); // Start playing the video
-  
-  // Position the sketch window on a specific screen (e.g., secondary monitor)
-  // You may need to adjust these values based on your screen setup
-  //int sketchX = 1920; // X position (for a dual monitor setup where the primary monitor is 1920 pixels wide)
-  //int sketchY = 0; // Y position
-  //surface.setLocation(0, sketchY); // Set the location of the sketch window
-  time=millis();
+    printArgs("setup");
+
+    if (isDry()) {
+        return;
+    }
+
+    defineVideosFolder();
+    println("OS := " + System.getProperty("os.name"));
+    println("videos folder := " + videosFolder);
+    String videoFile = videosFolder + "D01.HAND.w.LAMP_1.mp4";
+    println("video file := " + videoFile);
+
+    // Check if the video file exists
+    if (!isValidFile(videoFile)) {
+        println("Error: The video file does not exist or is not accessible.");
+        return;
+    }
+
+    // Set a windowed size for development
+    size(800, 600, P2D);
+
+
+    // Load the 96x192 video file
+    myMovie = new Movie(this, videoFile);
+    if (myMovie.width != 92 && myMovie.height != myMovie.width * 2) {
+      // TODO: make code robust to video size
+      println("video size is wrong: " + " width = " + myMovie.width + " height = " + myMovie.height);
+      println("quiting...");
+      return;
+    }
+    myMovie.play();
+
+    time = millis();
 }
 
 void draw() {
-    time=millis();
-//  if ((millis()-time)>400){time=millis();locx=locx+50;println('x');println(locx);println(locy);
-//  if ((locx>800)){locx=0;locy=locy+50;}
-//}
-//  background(0);
-  if (myMovie.available() == true) {
-    myMovie.read(); // Read new frame
-  }
-  image(myMovie,0,0,480,720);
-  //image(myMovie, 596,308,96,96); // A
-//  //image(myMovie, locx,locy,96,96); 
-//    //image(myMovie, 500,404,96,96); //B
-//    image(myMovie, 596,20,96,96); //C
-println(millis()-time);
+
+    if (isDry()) {
+        return;
+    }
+
+    background(0);
+    // if ((millis() - time) > 400) {
+    //     time = millis();
+    //     locx = locx + 50;
+    //     println('x');
+    //     println(locx);
+    //     println(locy);
+    //     if ((locx > 400)) {
+    //         locx = 0;
+    //         locy = locy + 50;
+    //     }
+    // }
+    
+    if (myMovie.available() == true) {
+        myMovie.read(); // Read new frame
+    }
+    // := image(myMovie, x, y, width, height, srcX, srcY, srcWidth, srcHeight)
+
+    if (isDebug()) {
+        image(myMovie, 110, 0); // play entire image
+    }
+
+    // Display the upper half of the video without scaling
+    image(myMovie, 0, 0, 96, 96, 0, 0, 96, 96);
+
+    // Display the lower half of the video without scaling
+    image(myMovie, 0, 96, 96, 96, 0, 96, 96, 192);
+    
 }
 
 // Called every time a new frame is available to read
 void movieEvent(Movie m) {
-  m.read();
+    m.read();
 }
-// import java.io.File;
 
-// void setup() {
-//   String folder = "data";
-//   String filename = "myfile.txt";
-//   File file = new File(folder, filename);
-  
-//   println("Path: " + file.getPath());
-//   println("Absolute Path: " + file.getAbsolutePath());
-//   println("Exists: " + file.exists());
-// }
+
+/* HELPERS */
+
+void printArgs(String from) {
+    println();
+    println("Arguments from " + from + ":");
+    if (args != null && args.length > 0) {
+        for (int i = 0; i < args.length; i++) {
+            println(String.format("  Argument %d: %s", i, args[i]));
+        }
+    } else {
+        println("  No arguments passed.");
+    }
+    println();
+}
+
+// Function to check if there are any command-line arguments
+boolean hasArgs() {
+    return args != null && args.length > 0;
+}
+
+// Function to check if a specific argument at an index equals a value
+boolean hasArgs(int index, String value) {
+    // `0` args[0] = `--args`
+    if(args != null && index >= 0 && index < args.length) {
+        return args[index].equals(value);
+    }
+    return false;
+}
+
+boolean argsHasValue(String value) {
+    boolean res = false;
+    if (args != null && args.length > 0) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].toLowerCase().equals(value)) {
+              res = true;
+              break;
+            }
+        }
+    }
+    return res;
+}
+
+boolean isDry() { 
+  boolean res = argsHasValue("dry");
+  return res;
+}
+
+boolean isDebug() { 
+  boolean res = argsHasValue("debug");
+  return res;
+}
+
+//Detect the operating system and set the folder path accordingly
+void defineVideosFolder() {
+    if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        videosFolder = videosFolderMac;
+    } else if (System.getProperty("os.name").toLowerCase().contains("linux")) {
+        videosFolder = videosFolderPi;
+    }
+}
+
+// Function to check if a path points to a valid file
+boolean isValidFile(String filePath) {
+    File file = new File(filePath);
+    return file.exists() && file.isFile();
+}
