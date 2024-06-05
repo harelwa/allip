@@ -23,3 +23,33 @@ tasks:
     env:
       DISPLAY: ":0"
     desc: _ 
+
+  voices:list-devices:
+    cmds:
+      - aplay -l
+    desc: _
+
+  voices:play:with-vlc:
+    cmds:
+      - |
+        cvlc \
+          --aout alsa \
+          --alsa-audio-device hw:3,0 \
+          --volume 200 \
+          --loop \
+          $(realpath ~/data/altar.voices/MOFAIM.KFAR-BLUM.JUNE-01-2024.13PM.wav)
+    desc: _
+
+  voices:play:with-ffplay:
+    cmds:
+      - |
+        ffplay \
+          -nodisp \
+          -autoexit \
+          -loop 0 \
+          -volume 100 \
+          $(realpath ~/data/altar.voices/MOFAIM.KFAR-BLUM.JUNE-01-2024.13PM.wav)
+    env:
+      SDL_AUDIODRIVER: "alsa"
+      AUDIODEV: "hw:3,0"
+    desc: _
