@@ -42,7 +42,7 @@ void setup() {
         println("quiting...");
         return;
     }
-    myMovie.play();
+    myMovie.loop(); // Start looping the video
     background(135, 206, 235);// BLUE (0, 0, 255);
     time = millis();
 }
@@ -65,17 +65,16 @@ void draw() {
     }
     
     if (isCalib()) {
-        // calibration results by ROI.AMIT (PRINCE)
-        //image(myMovie, 596,308,96,96);    //A ??
-        // image(myMovie, 596,20,96,96);    //C ??
-        //image(myMovie, locx,locy,96,96);  //  ??
-        if ((millis() - time) > 400) {
+        if ((millis() - time) > 800) {
             time = millis();
             locx = locx + 50;
             println("calib curr (x, y) = (" + locx + ", " + locy + ")");
-            if ((locx > 400)) {
+            if (locx > (800 - 96)) {
                 locx = 0;
                 locy = locy + 50;
+            } 
+            if (locy > (600 - 96)) {
+                locy = 0;
             }
         }
         // Display the upper half of the video without scaling
@@ -86,9 +85,12 @@ void draw() {
         
         // Display the upper half of the video without scaling
         image(myMovie, lm_015_x, lm_015_y, 96, 96, 0, 0, 96, 96);
-        
+
+        int lm_182_x = 596;
+        int lm_182_y = 176;
+
         // Display the lower half of the video without scaling
-        image(myMovie, 596, 308, 96, 96, 0, 96, 96, 192);
+        image(myMovie, lm_182_x, lm_182_y, 96, 96, 0, 96, 96, 192);
     }
 }
 
