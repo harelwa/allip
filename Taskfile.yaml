@@ -65,4 +65,25 @@ tasks:
   list-network-devices:
     cmds:
       - sudo arp-scan --localnet --resolve
-    desc: _      
+    desc: _
+
+  video:loop:cvlc:
+    desc: |
+      # "--start-time=26 --stop-time=32"
+      # to control vlc, in a sperate terminal run:
+        >$ nc localhost 4212
+        then you can:
+         .. pause
+         .. play
+         .. stop
+         .. quit
+    env:
+      DISPLAY: ":0"
+    cmds:
+      - |
+        cvlc \
+          --extraintf rc \
+          --rc-host localhost:4212 \
+          --loop \
+          --fullscreen \
+          --no-video-title-show /home/altar/pawns.court/altar.aleph/exports/D01.HAND.w.LAMP__HAND.and.WHITE.mp4__FULL_FRAME.mp4
