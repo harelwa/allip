@@ -32,7 +32,7 @@ WHEN YOU DONT KNOW WHAT TO DO, REST.
 
 matrix index = (i, j)
 
-## Altar Voices
+## Altar ALEPH
 
 play audio in a loop, to selected device, controling volume
 
@@ -54,3 +54,14 @@ to list devices:
 aplay -l
 ```
 
+codec error from hell:
+
+```bash
+** (Processing core video:5621): WARNING **: 14:58:58.704: v4l2h264dec0: 1 frames 191-191 left undrained after CMD_STOP, eos sent too early: bug in decoder -- please file a bug
+```
+
+## CUTTING VIDEOS
+
+```bash
+ffmpeg -i /home/altar/pawns.court/altar.aleph/exports/D01.HAND.w.LAMP__HAND.and.WHITE.mp4 -ss 00:00:26 -t 00:00:15 -c copy D01.HAND.w.LAMP__HAND.and.WHITE_short.mp4
+```
