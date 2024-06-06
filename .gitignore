@@ -43,3 +43,5 @@ _local_store/
 # DATA
 
 *.mov
+
+.DS_Store

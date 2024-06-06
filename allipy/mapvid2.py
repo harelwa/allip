@@ -1,10 +1,13 @@
+import os
 import cv2
 import numpy as np
 
 # Parameters
 frame_size = (800, 600)
-input_video_path = '/Users/harelwahnich/Documents/works.and.docs/2024.amot/pawns.court/altar.aleph/exports/D01.HAND.w.LAMP_1.mp4'
-output_file = 'D01.HAND.w.LAMP_1__FULL_FRAME.mp4'
+input_video_dir = '/Users/harelwahnich/Documents/works.and.docs/2024.amot/pawns.court/altar.aleph/exports/'
+input_video_name = 'D01.HAND.w.LAMP__HAND.and.WHITE.mp4'
+input_video_path = os.path.join(input_video_dir, input_video_name)
+output_file = f'{input_video_name}__FULL_FRAME.mp4'
 
 y_err = 36  
 x_err = 0
@@ -33,11 +36,12 @@ while True:
     if not ret:
         break
     
-    # Resize the frame to 96x192 if necessary
-    frame = cv2.resize(frame, (96, 192))
+    # # Resize the frame to 96x192 if necessary
+    # frame = cv2.resize(frame, (96, 192))
     
     # Create a new frame with a white background
-    output_frame = np.full((frame_size[1], frame_size[0], 3), (255, 255, 255), np.uint8)
+    bg_color = (0, 0, 0) # (255, 255, 255)
+    output_frame = np.full((frame_size[1], frame_size[0], 3), bg_color, np.uint8)
     
     # Extract upper and lower halves
     upper_half = frame[:96, :]
