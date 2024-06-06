@@ -8,7 +8,7 @@ int locy = 0;
 // Variables for the videos folder
 String homeDir = System.getProperty("user.home");
 String videosFolderMac = homeDir + "/Documents/works.and.docs/2024.amot/pawns.court/altar.aleph/exports/";
-String videosFolderPi = homeDir + "/Documents/works.and.docs/2024.amot/pawns.court/altar.aleph/exports/";  // TODO: FIXME
+String videosFolderPi = homeDir + "/pawns.court/altar.aleph/exports/";
 String videosFolder;
 
 void setup() {
