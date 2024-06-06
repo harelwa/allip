@@ -53,10 +53,11 @@ void draw() {
     }
     
     background(135, 206, 235);// BLUE (0, 0, 255);
-    
-    if (myMovie.available() == true) {
-        myMovie.read(); // Read new frame
-    }
+
+    //TODO: this is not clear    
+    // if (myMovie.available() == true) {
+    //     myMovie.read(); // Read new frame
+    // }
     
     // := image(myMovie, x, y, width, height, srcX, srcY, srcWidth, srcHeight)
     
