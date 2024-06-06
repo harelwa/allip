@@ -54,3 +54,10 @@ tasks:
       SDL_AUDIODRIVER: "alsa"
       AUDIODEV: "hw:3,0"
     desc: _
+  
+  list-displays:
+    cmds:
+      - |
+        DISPLAY=:0 xrandr --listmonitors
+    desc: _
+    silent: yes

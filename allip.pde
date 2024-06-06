@@ -21,7 +21,8 @@ void setup() {
     defineVideosFolder();
     println("OS := " + System.getProperty("os.name"));
     println("videos folder := " + videosFolder);
-    String videoFile = videosFolder + "D01.HAND.w.LAMP_1.mp4";
+    String videoFileName = "D01.HAND.w.LAMP_1.mp4";
+    String videoFile = videosFolder + videoFileName;
     println("video file := " + videoFile);
     
     // Check if the video file exists
