@@ -19,7 +19,8 @@ tasks:
 
   pr:run-remote:
     cmds:
-      - processing-java --sketch=$(realpath .) --output=/tmp/processing/test --force --run {{.CLI_ARGS}}
+      - echo > /tmp/luki.txt
+      - processing-java --sketch=$(realpath .) --output=/tmp/processing/test --force --run {{.CLI_ARGS}} | tee /tmp/luki.txt
     env:
       DISPLAY: ":0"
     desc: _ 
