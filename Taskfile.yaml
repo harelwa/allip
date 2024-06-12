@@ -61,3 +61,8 @@ tasks:
         DISPLAY=:0 xrandr --listmonitors
     desc: _
     silent: yes
+
+  list-network-devices:
+    cmds:
+      - sudo arp-scan --localnet --resolve
+    desc: _      
