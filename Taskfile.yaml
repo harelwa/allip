@@ -25,6 +25,12 @@ tasks:
       DISPLAY: ":0"
     desc: _ 
 
+  images:run:remotely:
+    cmds:
+      - |
+        ssh altar@altar.local 'export DISPLAY=:0 && cd /home/altar/repos/allip && processing-java --sketch=$(realpath .) --output=/tmp/processing/test --force --run'
+    desc: _
+
   voices:list-devices:
     cmds:
       - aplay -l
