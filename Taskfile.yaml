@@ -31,6 +31,12 @@ tasks:
         ssh altar@altar.local 'export DISPLAY=:0 && cd /home/altar/repos/allip && processing-java --sketch=$(realpath .) --output=/tmp/processing/test --force --run'
     desc: _
 
+  voices:run:remotely:
+    cmds:
+      - |
+        ssh altar@altar-voices.local 'task -d /home/altar/repos/allip voices:play:with-mvp'
+    desc: _
+
   voices:list-devices:
     cmds:
       - aplay -l
