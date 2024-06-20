@@ -134,10 +134,12 @@ tasks:
           --no-video-title-show /home/altar/pawns.court/altar.aleph/exports/D01.HAND.w.LAMP__HAND.and.WHITE.mp4__FULL_FRAME.mp4
 
   bwv1006:ly:build:
+    vars:
+      FILE_NAME: '{{default "bwv-1006-cello" .FILE_NAME}}'
     cmds:
-      - lilypond -s bwv.1006/bwv-1006-cello.ly
-      - mv bwv-1006-cello.pdf bwv.1006/
-      - open bwv.1006/bwv-1006-cello.pdf
+      - lilypond -s bwv.1006/{{.FILE_NAME}}.ly
+      - mv {{.FILE_NAME}}.pdf bwv.1006/
+      - open bwv.1006/{{.FILE_NAME}}.pdf
     desc: __
   
   
