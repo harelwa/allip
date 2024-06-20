@@ -18,7 +18,7 @@ tasks:
 
   images:play:with-processing:
     cmds:
-      - bash -c "nohup processing-java --sketch=$(realpath .) --output=/tmp/processing/test --force --run {{.CLI_ARGS}} | tee images__play__with-processing.log &"
+      - bash -c "tmux new-session -d -s pr_session 'processing-java --sketch=$(realpath .) --output=/tmp/processing/test --force --run {{.CLI_ARGS}} | tee images__play__with-processing.log'"
       - sudo logrotate -f logrotate-images.conf
     env:
       DISPLAY: ":0"
