@@ -34,7 +34,7 @@ tasks:
   voices:run:remotely:
     cmds:
       - |
-        ssh altar@altar-voices.local 'task -d /home/altar/repos/allip voices:play:with-mvp'
+        ssh altar@altar-voices.local 'task -d /home/altar/repos/allip voices:play:with-mpv'
     desc: _
 
   voices:list-devices:
@@ -53,19 +53,14 @@ tasks:
           $(realpath ~/data/altar.voices/MOFAIM.KFAR-BLUM.JUNE-01-2024.13PM.wav)
     desc: _
 
-  voices:play:with-mvp:
+  voices:play:with-mpv:
     vars:
       START: '{{default "300" .START}}'
       FILE: '{{default "/home/altar/pawns.court/nazeret.audio/STE-045__Nazeret__2.wav" .FILE}}'
       VOLUME: '{{default "240" .VOLUME}}'
     cmds:
-      - |
-        mpv \
-          --loop=inf \
-          --volume={{.VOLUME}} \
-          --start={{.START}} \
-          --audio-device=alsa/plughw:CARD=DAC,DEV=0 \
-          $(realpath {{.FILE}})
+      - bash -c "nohup mpv --loop=inf --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__play__with-mvp.log &"
+      - sudo logrotate -f logrotate-voices.conf
     desc: |
       Headphones = alsa/plughw:CARD=Headphones,DEV=0
       DAC = alsa/plughw:CARD=DAC,DEV=0
@@ -116,3 +111,9 @@ tasks:
           --loop \
           --fullscreen \
           --no-video-title-show /home/altar/pawns.court/altar.aleph/exports/D01.HAND.w.LAMP__HAND.and.WHITE.mp4__FULL_FRAME.mp4
+
+
+  test:nowait:
+    cmds:
+      - for: [ 'a', 'b', 'c', 'd', 'e']
+        cmd: "echo {{ .ITEM }} && sleep 2"
