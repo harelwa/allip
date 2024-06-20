@@ -75,7 +75,7 @@ tasks:
       FILE: '{{default "/home/altar/pawns.court/nazeret.audio/STE-045__Nazeret__2.wav" .FILE}}'
       VOLUME: '{{default "240" .VOLUME}}'
     cmds:
-      - bash -c "nohup mpv --loop=inf --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__play__with-mvp.log &"
+      - bash -c "tmux new-session -d -s mpv_session 'mpv --loop=inf --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__play__with-mvp.log'"
       - sudo logrotate -f logrotate-voices.conf
     desc: |
       Headphones = alsa/plughw:CARD=Headphones,DEV=0
