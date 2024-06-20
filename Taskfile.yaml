@@ -32,13 +32,25 @@ tasks:
   images:run:remotely:
     cmds:
       - |
-        ssh altar@altar.local 'export DISPLAY=:0 && cd /home/altar/repos/allip && processing-java --sketch=$(realpath .) --output=/tmp/processing/test --force --run'
+        ssh altar@altar.local 'task -d /home/altar/repos/allip images:play:with-processing'
+    desc: _
+
+  images:kill:remotely:
+    cmds:
+      - |
+        ssh altar@altar.local 'task -d /home/altar/repos/allip images:kill'
     desc: _
 
   voices:run:remotely:
     cmds:
       - |
         ssh altar@altar-voices.local 'task -d /home/altar/repos/allip voices:play:with-mpv'
+    desc: _
+
+  voices:kill:remotely:
+    cmds:
+      - |
+        ssh altar@altar.local 'task -d /home/altar/repos/allip voices:kill'
     desc: _
 
   voices:list-devices:
