@@ -11,7 +11,7 @@ tasks:
       - echo "{{.GREETING}}"
     silent: true
 
-  cenv:create:
+  cenv:allipy:create:
     desc: _
     cmds:
       - mamba create -y -n allip python=3.10 ipython jupyter pillow opencv gst-plugins-base gst-plugins-good gstreamer
@@ -133,11 +133,11 @@ tasks:
           --fullscreen \
           --no-video-title-show /home/altar/pawns.court/altar.aleph/exports/D01.HAND.w.LAMP__HAND.and.WHITE.mp4__FULL_FRAME.mp4
 
-
-  pr:run-remote:deprecated:
+  bwv1006:ly:build:
     cmds:
-      - echo > /tmp/luki.txt
-      - processing-java --sketch=$(realpath .) --output=/tmp/processing/test --force --run {{.CLI_ARGS}} | tee /tmp/luki.txt
-    env:
-      DISPLAY: ":0"
-    desc: _ 
+      - lilypond -s bwv.1006/bwv-1006-cello.ly
+      - mv bwv-1006-cello.pdf bwv.1006/
+      - open bwv.1006/bwv-1006-cello.pdf
+    desc: __
+  
+  
