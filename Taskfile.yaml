@@ -71,9 +71,9 @@ tasks:
 
   voices:play:with-mpv:
     vars:
-      START: '{{default "300" .START}}'
-      FILE: '{{default "/home/altar/pawns.court/nazeret.audio/STE-045__Nazeret__2.wav" .FILE}}'
-      VOLUME: '{{default "240" .VOLUME}}'
+      START: '{{default "0" .START}}'
+      FILE: '{{default "/home/altar/pawns.court/nazeret.audio/THE.VOICES__DAY__no1.wav" .FILE}}'
+      VOLUME: '{{default "100" .VOLUME}}'
     cmds:
       - bash -c "tmux new-session -d -s mpv_session 'mpv --loop=inf --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__play__with-mvp.log'"
       - sudo logrotate -f logrotate-voices.conf
