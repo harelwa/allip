@@ -1,7 +1,13 @@
 import processing.video.*;
 
-int time;
+// measure start up time == time to first image
+int startTime;
+boolean printStartUpTime;
+
 Movie myMovie;
+
+// calibration
+int time;
 int locx = 0;
 int locy = 0;
 
@@ -12,7 +18,9 @@ String videosFolderPi = homeDir + "/pawns.court/altar.aleph/exports/";
 String videosFolder;
 
 void setup() {
-    printArgs("setup");
+    startTime = millis();
+    printStartUpTime = true;
+    println("\n\n --- start time (ms) = " + startTime + "\n\n");
     
     if (isDry()) {
         return;
@@ -52,7 +60,15 @@ void draw() {
     if (isDry()) {
         return;
     }
+
     
+    if (printStartUpTime) {        
+        printStartUpTime = false;
+        int currentTime = millis();
+        int elapsedTime = currentTime - startTime;
+        println("\n\n --- start up time (ms) = " + elapsedTime + "\n\n");
+    }
+
     background(135, 206, 235);// BLUE (0, 0, 255);
 
     //TODO: this is not clear    

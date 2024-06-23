@@ -65,3 +65,9 @@ codec error from hell:
 ```bash
 ffmpeg -i /home/altar/pawns.court/altar.aleph/exports/D01.HAND.w.LAMP__HAND.and.WHITE.mp4 -ss 00:00:26 -t 00:00:15 -c copy D01.HAND.w.LAMP__HAND.and.WHITE_short.mp4
 ```
+
+## Processing "Time to first image"
+
+ --- start up time (ms) = *1688*
+
+note: this is not necessarily accurate. as "time for first line of code is setup() is not considered"
