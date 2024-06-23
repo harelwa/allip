@@ -162,3 +162,13 @@ tasks:
       - ssh -o ConnectTimeout=2 altar@altar.local 'cd /home/altar/repos/allip && git pull --rebase'
       - ssh -o ConnectTimeout=2 altar@altar-voices.local 'cd /home/altar/repos/allip && git pull --rebase'
     desc: __
+
+  system:up:synced-ish:
+    cmds:
+      - task images:run:remotely
+      - echo "after images:run:remotely"
+      - sleep 1.688
+      - sleep 10
+      - task voices:run:remotely
+      - echo "after images:run:remotely"
+    desc: __
