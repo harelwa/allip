@@ -38,8 +38,20 @@ tasks:
   images:kill:remotely:
     cmds:
       - |
-        ssh altar@altar.local 'task -d /home/altar/repos/allip images:kill'
+        ssh -o ConnectTimeout=2 altar@altar.local 'task -d /home/altar/repos/allip images:kill'
     desc: _
+
+  shutdown:altar-voices:remotely:
+    cmds:
+      - task voices:kill:remotely || true
+      - ssh -o ConnectTimeout=2 altar@altar-voices.local 'sudo shutdown -h now' || true
+    desc: __
+
+  shutdown:altar:remotely:
+    cmds:
+      - task images:kill:remotely || true
+      - ssh -o ConnectTimeout=2 altar@altar.local 'sudo shutdown -h now' || true
+    desc: __
 
   voices:run:remotely:
     cmds:
@@ -50,7 +62,7 @@ tasks:
   voices:kill:remotely:
     cmds:
       - |
-        ssh altar@altar-voices.local 'task -d /home/altar/repos/allip voices:kill'
+        ssh -o ConnectTimeout=2 altar@altar-voices.local 'task -d /home/altar/repos/allip voices:kill'
     desc: _
 
   voices:list-devices:
