@@ -154,4 +154,11 @@ tasks:
       - open bwv.1006/{{.FILE_NAME}}.pdf
     desc: __
   
-  
+
+  changes:broadcasts-to-altars:
+    cmds:
+      - git pull --rebase
+      - git push
+      - ssh -o ConnectTimeout=2 altar@altar.local 'cd /home/altar/repos/allip && git pull --rebase'
+      - ssh -o ConnectTimeout=2 altar@altar-voices.local 'cd /home/altar/repos/allip && git pull --rebase'
+    desc: __
