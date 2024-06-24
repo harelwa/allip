@@ -99,7 +99,7 @@ tasks:
   voices:play:with-mpv:
     vars:
       START: '{{default "0" .START}}'
-      FP_PREFIX: '{{default "{{.ALTAR_VOICES_EXPORTS}}" .FP_PREFIX}}'
+      FP_PREFIX: '{{default .ALTAR_VOICES_EXPORTS .FP_PREFIX}}'
       FP_SUFFIX: '{{default "THE.VOICES__DAY__no1.wav" .FP_SUFFIX}}'
       FILE: '{{.FP_PREFIX}}/{{.FP_SUFFIX}}'
       VOLUME: '{{default "100" .VOLUME}}'
