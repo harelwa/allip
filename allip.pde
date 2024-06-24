@@ -13,11 +13,16 @@ int locy = 0;
 
 // Variables for the videos folder
 String homeDir = System.getProperty("user.home");
-String videosFolderMac = homeDir + "/Documents/works.and.docs/2024.amot/pawns.court/altar.aleph/exports/";
-String videosFolderPi = homeDir + "/pawns.court/altar.aleph/exports/";
+String videosFolderMac = homeDir + "/Documents/works.and.docs/2024.amot/pawns.court/altar.aleph/exports";
+String videosFolderPi = homeDir + "/pawns.court/altar.aleph/exports";
 String videosFolder;
 
+
+// DEBUG
+boolean printInArgExists = true;
+
 void setup() {
+    printArgs("setup");
     startTime = millis();
     printStartUpTime = true;
     println("\n\n --- start time (ms) = " + startTime + "\n\n");
@@ -29,8 +34,11 @@ void setup() {
     defineVideosFolder();
     println("OS := " + System.getProperty("os.name"));
     println("videos folder := " + videosFolder);
-    String videoFileName = "D01.HAND.w.LAMP_2.mp4";
-    String videoFile = videosFolder + videoFileName;
+    String videoFilePathSuffix = "D01.HAND.w.LAMP_2.mp4";
+    if (inArgExists("fileSuffix")) {
+        videoFilePathSuffix = getKWArgValue("fileSuffix");
+    }
+    String videoFile = videosFolder + "/" + videoFilePathSuffix;
     println("video file := " + videoFile);
     
     // Check if the video file exists
@@ -61,7 +69,6 @@ void draw() {
         return;
     }
 
-    
     if (printStartUpTime) {        
         printStartUpTime = false;
         int currentTime = millis();
@@ -121,71 +128,102 @@ void movieEvent(Movie m) {
 /* HELPERS */
 
 void printArgs(String from) {
-println();
-println("Arguments from " + from + ":");
-if (args != null && args.length > 0) {
-for (int i = 0; i < args.length; i++) {
-println(String.format("  Argument %d: %s", i, args[i]));
-}
+    println();
+    println("Arguments from " + from + ":");
+    if (args != null && args.length > 0) {
+        for (int i = 0; i < args.length; i++) {
+            println(String.format("  Argument %d: %s", i, args[i]));
+        }
     } else {
-println("  No arguments passed.");
+        println("  No arguments passed.");
     }
-println();
+    println();
 }
 
 // Function to check if there are any command-line arguments
 boolean hasArgs() {
-return args != null && args.length > 0;
+    return args != null && args.length > 0;
 }
 
 // Function to check if a specific argument at an index equals a value
 boolean hasArgs(int index, String value) {
-// `0` args[0] = `--args`
-if(args != null && index >= 0 && index < args.length) {
-return args[index].equals(value);
+    if(args != null && index >= 0 && index < args.length) {
+        return args[index].equals(value);
     }
-return false;
+    return false;
 }
 
-boolean argsHasValue(String value) {
-boolean res = false;
-if (args != null && args.length > 0) {
-for (int i = 0; i < args.length; i++) {
-if (args[i].toLowerCase().equals(value)) {
-res = true;
-break;
-}
-}
+boolean inArgExists(String argName) {
+    boolean res = false;
+    if (printInArgExists) {
+        println(" --- [inArgExists] looking for arg = " + argName);
     }
-return res;
+
+    if (args != null && args.length > 0) {
+        for (int i = 0; i < args.length; i++) {
+            if (printInArgExists) {
+                println(" --- [inArgExists] comparing arg to = " + args[i].toLowerCase());
+            }
+            if (args[i].toLowerCase().equals(argName.toLowerCase())) {
+                if (printInArgExists) {
+                    println(" --- [inArgExists] found arg = " + argName);
+                }
+                res = true;
+                break;
+            }
+        }
+    }
+    if (printInArgExists) {
+        if (res) {
+            println(" --- Found InArg = " + argName);
+        } else {
+            println(" --- Can't Find InArg = " + argName);
+        }
+    } else {
+        printInArgExists = false;
+    }
+    return res;
+}
+
+String getKWArgValue(String kwarg_name) {
+    String kwarg_value = "UNDEFINED";
+    if (args != null && args.length > 0) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].toLowerCase().equals(kwarg_name.toLowerCase())) {
+                kwarg_value = args[i+1];
+                break;
+            }
+        }
+    }
+    return kwarg_value;
 }
 
 boolean isDry() { 
-boolean res = argsHasValue("dry");
-return res;
+    boolean res = inArgExists("dry");
+    return res;
 }
 
 boolean isDebug() { 
-boolean res = argsHasValue("debug");
-return res;
+    boolean res = inArgExists("debug");
+    return res;
 }
 
 boolean isCalib() {
-boolean res = argsHasValue("calib");
-return res;
+    boolean res = inArgExists("calib");
+    return res;
 }
 
 //Detect the operating system and set the folder path accordingly
 void defineVideosFolder() {
-if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-videosFolder = videosFolderMac;
+    if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        videosFolder = videosFolderMac;
     } else if (System.getProperty("os.name").toLowerCase().contains("linux")) {
-videosFolder = videosFolderPi;
+        videosFolder = videosFolderPi;
     }
 }
 
 // Function to check if a path points to a valid file
 boolean isValidFile(String filePath) {
-File file = new File(filePath);
-return file.exists() && file.isFile();
+    File file = new File(filePath);
+    return file.exists() && file.isFile();
 }

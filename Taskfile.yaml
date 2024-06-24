@@ -22,7 +22,10 @@ tasks:
       - sudo logrotate -f logrotate-images.conf
     env:
       DISPLAY: ":0"
-    desc: _ 
+    desc: |
+      with args example:
+
+      >$ task images:play:with-processing -- --args fileSuffix tests/D01.HAND.WHITE.mp4
 
   images:kill:
     cmds:
