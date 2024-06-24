@@ -3,12 +3,16 @@
 version: '3'
 
 vars:
-  GREETING: Hello, World!
+  GREETING: hello altar
+  
   MAC_PAWNS_COURT_FP: /Users/harelwahnich/Documents/works.and.docs/2024.amot/pawns.court
   PIS_PAWNS_COURT_FP: /home/altar/pawns.court
   
   MAC_IMAGES_EXPORTS: '{{.MAC_PAWNS_COURT_FP}}/altar.aleph/exports'
   ALTAR_IMAGES_EXPORTS: '{{.PIS_PAWNS_COURT_FP}}/altar.aleph/exports'
+  
+  MAC_VOICES_EXPORTS: '{{.MAC_PAWNS_COURT_FP}}/mofaim.audio/exsports'
+  ALTAR_VOICES_EXPORTS: '{{.PIS_PAWNS_COURT_FP}}/nazeret.audio'
 
 tasks:
   default:
@@ -53,7 +57,6 @@ tasks:
 
   shutdown:altar-voices:remotely:
     cmds:
-      - task voices:kill:remotely || true
       - ssh -o ConnectTimeout=2 altar@altar-voices.local 'sudo shutdown -h now' || true
     desc: __
 
@@ -64,9 +67,11 @@ tasks:
     desc: __
 
   voices:run:remotely:
+    vars:
+      INPUT: '{{default "" .INPUT}}'
     cmds:
       - |
-        ssh altar@altar-voices.local 'nohup task -d /home/altar/repos/allip voices:play:with-mpv'
+        ssh altar@altar-voices.local 'nohup task -d /home/altar/repos/allip voices:play:with-mpv {{.INPUT}}'
     desc: _
 
   voices:kill:remotely:
@@ -94,7 +99,9 @@ tasks:
   voices:play:with-mpv:
     vars:
       START: '{{default "0" .START}}'
-      FILE: '{{default "/home/altar/pawns.court/nazeret.audio/THE.VOICES__DAY__no1.wav" .FILE}}'
+      FP_PREFIX: '{{default "{{.ALTAR_VOICES_EXPORTS}}" .FP_PREFIX}}'
+      FP_SUFFIX: '{{default "THE.VOICES__DAY__no1.wav" .FP_SUFFIX}}'
+      FILE: '{{.FP_PREFIX}}/{{.FP_SUFFIX}}'
       VOLUME: '{{default "100" .VOLUME}}'
     cmds:
       - bash -c "tmux new-session -d -s mpv_session 'mpv --loop=inf --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__play__with-mvp.log'"
@@ -178,7 +185,6 @@ tasks:
       - task images:run:remotely
       - echo "after images:run:remotely"
       - sleep 1.688
-      - sleep 10
       - task voices:run:remotely
       - echo "after images:run:remotely"
     desc: __
