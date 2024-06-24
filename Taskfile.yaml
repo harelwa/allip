@@ -4,6 +4,11 @@ version: '3'
 
 vars:
   GREETING: Hello, World!
+  MAC_PAWNS_COURT_FP: /Users/harelwahnich/Documents/works.and.docs/2024.amot/pawns.court
+  PIS_PAWNS_COURT_FP: /home/altar/pawns.court
+  
+  MAC_IMAGES_EXPORTS: '{{.MAC_PAWNS_COURT_FP}}/altar.aleph/exports'
+  ALTAR_IMAGES_EXPORTS: '{{.PIS_PAWNS_COURT_FP}}/altar.aleph/exports'
 
 tasks:
   default:
@@ -33,9 +38,11 @@ tasks:
     desc: __
 
   images:run:remotely:
+    vars:
+      INPUT: '{{default "" .INPUT}}'
     cmds:
       - |
-        ssh altar@altar.local 'task -d /home/altar/repos/allip images:play:with-processing'
+        ssh altar@altar.local 'task -d /home/altar/repos/allip images:play:with-processing {{.INPUT}}'
     desc: _
 
   images:kill:remotely:
@@ -174,4 +181,12 @@ tasks:
       - sleep 10
       - task voices:run:remotely
       - echo "after images:run:remotely"
+    desc: __
+  
+  images:test:remotely:
+    vars:
+      TEST_FILE_SUFFIX: '{{default "tests/D01.HAND.WHITE.mp4" .TEST_FILE_SUFFIX}}'
+    cmds:
+      - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.TEST_FILE_SUFFIX}} pi.altar:{{.ALTAR_IMAGES_EXPORTS}}/{{.TEST_FILE_SUFFIX}}
+      - task images:run:remotely INPUT="-- --args fileSuffix {{.TEST_FILE_SUFFIX}}"
     desc: __
