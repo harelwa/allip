@@ -34,7 +34,7 @@ void setup() {
     defineVideosFolder();
     println("OS := " + System.getProperty("os.name"));
     println("videos folder := " + videosFolder);
-    String videoFilePathSuffix = "D01.HAND.w.LAMP_2.mp4";
+    String videoFilePathSuffix = "D01.RC__01__vidOnly.mp4";
     if (inArgExists("fileSuffix")) {
         videoFilePathSuffix = getKWArgValue("fileSuffix");
     }

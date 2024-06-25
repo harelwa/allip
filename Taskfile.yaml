@@ -100,7 +100,7 @@ tasks:
     vars:
       START: '{{default "0" .START}}'
       FP_PREFIX: '{{default .ALTAR_VOICES_EXPORTS .FP_PREFIX}}'
-      FP_SUFFIX: '{{default "THE.VOICES__DAY__no1.wav" .FP_SUFFIX}}'
+      FP_SUFFIX: '{{default "D01.RC__01_vidWithAudio.mp4" .FP_SUFFIX}}'
       FILE: '{{.FP_PREFIX}}/{{.FP_SUFFIX}}'
       VOLUME: '{{default "100" .VOLUME}}'
     cmds:
