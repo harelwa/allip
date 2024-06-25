@@ -1,28 +1,31 @@
-# The Altar Hearth Code
+# The Altar Hearth, 3rd Movement: Pawns court
 
-**note** this code is holy
-
-- video processing [py]
-- video live mapping [pde]
-
-## TASKS
-
-- [ ] Imp Calibration Routine
-- [ ] Calibrate Screen
-- [ ] Create Video in desired resolution
-- [ ] Map Video
-- [ ] Manipulate Videos
-  - how to crop ? ( maybe de vinci, as you are already editing there )
+## About
+In this repository you will find the "operating system" of *constempllation no. 2* by [Altar Hearth](https://www.instagram.com/altar.hearth/) / [Harel Wahnich](https://www.wahnich.studio/): **The Altar Hearth, 3rd Movement: Pawns court**.
 
 
-WHEN YOU DONT KNOW WHAT TO DO, REST.
+*Pawns Court* is presented as part of the [Bezalel MFA thesis exhibition](https://www.instagram.com/bezalel.mfa/).
 
-## INFO
+*Pawns Court* has two operating [pis](https://www.raspberrypi.com/): One for "sound"/audio, named *altar-voices*, and the other for "video"/image-stream named *altar*.
 
-- Graphic Card Resolution = 800 X 600
+**altar** is responsiblle of video live mapping to two 50x50 cm / 96x96 pxls / 5pp LED modules installed one over the other. It uses [processing](https://processing.org/download) to achive this task.
+
+**altar-voices** is responsiblle of audio, sent to a DAC connected to an apmlfier which has it's outputs connected to [25mm-exciter](https://www.daytonaudio.com/product/1177/daex25fhe-4-framed-high-efficiency-25mm-exciter) which are insalled on foam boards.
+
+[ tbd ] palying audio and video in sync on the two `pis` is done with `python`.
+
+"system control" = `pi` up / down // do this do that is done with commands sent over `ssh`.
+
+[go-task](https://taskfile.dev/installation/) is used as the project swiss task runner.
+
+## LED Diary
+
+### Modules
+
+- LED matrix Graphic Card Resolution = 800 X 600
 - Each led Module Resolution = 96 X 96
 
-## Modules Map
+**Modules Map**:
 
 | Nos. | Nos. | Nos. |
 |------|------|------|
@@ -32,7 +35,7 @@ WHEN YOU DONT KNOW WHAT TO DO, REST.
 
 matrix index = (i, j)
 
-## Altar ALEPH
+### Play Video
 
 play audio in a loop, to selected device, controling volume
 
@@ -54,20 +57,20 @@ to list devices:
 aplay -l
 ```
 
-codec error from hell:
+### Codec errors from hell
 
 ```bash
 ** (Processing core video:5621): WARNING **: 14:58:58.704: v4l2h264dec0: 1 frames 191-191 left undrained after CMD_STOP, eos sent too early: bug in decoder -- please file a bug
 ```
 
-## CUTTING VIDEOS
+### CUTTING VIDEOS
 
 ```bash
 ffmpeg -i /home/altar/pawns.court/altar.aleph/exports/D01.HAND.w.LAMP__HAND.and.WHITE.mp4 -ss 00:00:26 -t 00:00:15 -c copy D01.HAND.w.LAMP__HAND.and.WHITE_short.mp4
 ```
 
-## Processing "Time to first image"
+### Processing "Time to first image"
 
  --- start up time (ms) = *1688*
 
-note: this is not necessarily accurate. as "time for first line of code is setup() is not considered"
+**note**: this is not necessarily accurate. as "time for first line of code is setup() is not considered"
