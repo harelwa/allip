@@ -188,7 +188,13 @@ tasks:
       - task voices:run:remotely
       - echo "after images:run:remotely"
     desc: __
-  
+
+  system:down:
+    cmds:
+      - task images:kill:remotely || true
+      - task voices:kill:remotely || true
+    desc: __
+
   images:test:remotely:
     vars:
       TEST_FILE_SUFFIX: '{{default "tests/D01.HAND.WHITE.mp4" .TEST_FILE_SUFFIX}}'
