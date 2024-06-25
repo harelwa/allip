@@ -104,7 +104,7 @@ tasks:
       FILE: '{{.FP_PREFIX}}/{{.FP_SUFFIX}}'
       VOLUME: '{{default "100" .VOLUME}}'
     cmds:
-      - bash -c "tmux new-session -d -s mpv_session 'mpv --loop=inf --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__play__with-mvp.log'"
+      - bash -c "tmux new-session -d -s mpv_session 'mpv --no-video --loop=inf --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__play__with-mvp.log'"
       - sudo logrotate -f logrotate-voices.conf
     desc: |
       Headphones = alsa/plughw:CARD=Headphones,DEV=0
