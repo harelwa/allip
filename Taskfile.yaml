@@ -66,6 +66,14 @@ tasks:
       - ssh -o ConnectTimeout=2 altar@altar.local 'sudo shutdown -h now' || true
     desc: __
 
+  shutdown:
+    deps:
+      - shutdown:altar:remotely
+      - shutdown:altar-voices:remotely
+    cmds:
+      - echo "pis are down"
+    desc: __
+    
   voices:run:remotely:
     vars:
       INPUT: '{{default "" .INPUT}}'
