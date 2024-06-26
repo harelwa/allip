@@ -98,7 +98,7 @@ tasks:
     vars:
       START: '{{default "0" .START}}'
       FP_PREFIX: '{{default .ALTAR_VOICES_EXPORTS .FP_PREFIX}}'
-      FP_SUFFIX: '{{default "D01.RC__01_vidWithAudio.mp4" .FP_SUFFIX}}'
+      FP_SUFFIX: '{{default "D01.RC__02_vidWithAudio.mp4" .FP_SUFFIX}}'
       FILE: '{{.FP_PREFIX}}/{{.FP_SUFFIX}}'
       VOLUME: '{{default "100" .VOLUME}}'
     cmds:
@@ -184,6 +184,7 @@ tasks:
     vars:
       TEST_FILE_SUFFIX: '{{default "tests/D01.HAND.WHITE.mp4" .TEST_FILE_SUFFIX}}'
     cmds:
+      - task images:kill:remotely
       - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.TEST_FILE_SUFFIX}} pi.altar:{{.ALTAR_IMAGES_EXPORTS}}/{{.TEST_FILE_SUFFIX}}
       - task images:run:remotely INPUT="-- --args fileSuffix {{.TEST_FILE_SUFFIX}}"
     desc: __
@@ -225,3 +226,16 @@ tasks:
       - bash -c "tmux new-session -d -s voices_night_session './run-voices-night.sh | tee voices__bicluster_play__with-mvp.log'"
       - sudo logrotate -f logrotate-voices__bicluster.conf
     desc: __
+
+  spread:day:files:
+    vars:
+      RC_VERSION: 02
+      IMAGE_FN: "D01.RC__{{.RC_VERSION}}__vidOnly.mp4"
+      VOICES_FN: "D01.RC__{{.RC_VERSION}}__vidWithAudio.mp4"
+
+    cmds:
+      - test -f {{.MAC_IMAGES_EXPORTS}}/{{.IMAGE_FN}}
+      - test -f {{.MAC_IMAGES_EXPORTS}}/{{.VOICES_FN}}
+      - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.IMAGE_FN}}  pi.altar:{{.ALTAR_IMAGES_EXPORTS}}/{{.TEST_FILE_SUFFIX}}
+      - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.VOICES_FN}} pi.voices:{{.ALTAR_VOICES_EXPORTS}}/{{.TEST_FILE_SUFFIX}}
+    desc: ___
