@@ -74,3 +74,16 @@ ffmpeg -i /home/altar/pawns.court/altar.aleph/exports/D01.HAND.w.LAMP__HAND.and.
  --- start up time (ms) = *1688*
 
 **note**: this is not necessarily accurate. as "time for first line of code is setup() is not considered"
+
+syncing heuristically:
+
+```bash
+task images:run:remotely  0.09s user 0.03s system 10% cpu 1.115 total
+```
+
+measured with video by iphone we have:
+
+run no. 1 = 16.07
+run no. 2 = 12.22
+run no. 3 = 12.21
+run no. 4 = 13.02

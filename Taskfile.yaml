@@ -192,7 +192,7 @@ tasks:
     cmds:
       - task images:run:remotely
       - echo "after images:run:remotely"
-      - sleep 1.688
+      - sleep 12.5
       - task voices:run:remotely
       - echo "after images:run:remotely"
     desc: __
