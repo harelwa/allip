@@ -214,10 +214,16 @@ tasks:
 
   voices:night:play:quasi-still:
     vars:
+      START: '{{default "0" .START}}'
+      FP_PREFIX: '{{default .ALTAR_VOICES_EXPORTS .FP_PREFIX}}'
+      FP_SUFFIX: '{{default "quasi-still-fade-in-2.wav" .FP_SUFFIX}}'
+      FILE: '{{.FP_PREFIX}}/{{.FP_SUFFIX}}'
       VOLUME: '{{default "140" .VOLUME}}'
       LOOP: '{{default "no" .LOOP}}'
+      SESSION_NAME: quasi
     cmds:
-      - mpv --no-video --loop={{.LOOP}} --volume={{.VOLUME}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 "{{.ALTAR_VOICES_EXPORTS}}/quasi-still-fade-in.wav"
+      - bash -c "tmux new-session -d -s mpv_quasi_session 'mpv --no-video --loop={{.LOOP}} --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__quasi_play__with-mvp.log'"
+      - sudo logrotate -f logrotate-voices__quasi.conf
     desc: __
 
   voices:night:play:cello-no-two-bi-cluster:
