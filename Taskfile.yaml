@@ -236,6 +236,6 @@ tasks:
     cmds:
       - test -f {{.MAC_IMAGES_EXPORTS}}/{{.IMAGE_FN}}
       - test -f {{.MAC_IMAGES_EXPORTS}}/{{.VOICES_FN}}
-      - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.IMAGE_FN}}  pi.altar:{{.ALTAR_IMAGES_EXPORTS}}/{{.TEST_FILE_SUFFIX}}
-      - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.VOICES_FN}} pi.voices:{{.ALTAR_VOICES_EXPORTS}}/{{.TEST_FILE_SUFFIX}}
+      - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.IMAGE_FN}}  pi.altar:{{.ALTAR_IMAGES_EXPORTS}}/{{.IMAGE_FN}}
+      - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.VOICES_FN}} pi.voices:{{.ALTAR_VOICES_EXPORTS}}/{{.VOICES_FN}}
     desc: ___
