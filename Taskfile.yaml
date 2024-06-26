@@ -77,9 +77,10 @@ tasks:
   voices:run:remotely:
     vars:
       INPUT: '{{default "" .INPUT}}'
+      TIME_OF_DAY: '{{default "day" .TIME_OF_DAY}}'
     cmds:
       - |
-        ssh altar@altar-voices.local 'nohup task -d /home/altar/repos/allip voices:play:with-mpv {{.INPUT}}'
+        ssh altar@altar-voices.local 'nohup task -d /home/altar/repos/allip voices:{{.TIME_OF_DAY}}:play {{.INPUT}}'
     desc: _
 
   voices:kill:remotely:
@@ -104,7 +105,7 @@ tasks:
           $(realpath ~/data/altar.voices/MOFAIM.KFAR-BLUM.JUNE-01-2024.13PM.wav)
     desc: _
 
-  voices:play:with-mpv:
+  voices:day:play:
     vars:
       START: '{{default "0" .START}}'
       FP_PREFIX: '{{default .ALTAR_VOICES_EXPORTS .FP_PREFIX}}'
@@ -227,7 +228,7 @@ tasks:
       - mpv --no-video --loop={{.LOOP}} --volume={{.VOLUME}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 "{{.ALTAR_VOICES_EXPORTS}}/cello-no-two-bi-cluster.wav" 
     desc: __
 
-  voices:night:play-forever:
+  voices:night:play:
     vars:
       VOLUME: '{{default "100" .VOLUME}}'
       SLEEP_AFTER_QUASI: '{{default "180" .SLEEP_AFTER_QUASI}}'
