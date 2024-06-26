@@ -83,10 +83,16 @@ tasks:
         ssh altar@altar-voices.local 'nohup task -d /home/altar/repos/allip voices:{{.TIME_OF_DAY}}:play {{.INPUT}}'
     desc: _
 
-  voices:kill:remotely:
+  voices:kill:day:remotely:
     cmds:
       - |
-        ssh -o ConnectTimeout=2 altar@altar-voices.local 'task -d /home/altar/repos/allip voices:kill'
+        ssh -o ConnectTimeout=2 altar@altar-voices.local 'task -d /home/altar/repos/allip voices:kill:day'
+    desc: _
+
+  voices:kill:night:remotely:
+    cmds:
+      - |
+        ssh -o ConnectTimeout=2 altar@altar-voices.local 'task -d /home/altar/repos/allip voices:kill:night'
     desc: _
 
   voices:list-devices:
@@ -119,9 +125,14 @@ tasks:
       Headphones = alsa/plughw:CARD=Headphones,DEV=0
       DAC = alsa/plughw:CARD=DAC,DEV=0
 
-  voices:kill:
+  voices:kill:day:
     cmds:
       - pkill mpv
+    desc: __
+
+  voices:kill:night:
+    cmds:
+      - tmux kill-session -t voices_night_session
     desc: __
 
   voices:play:with-ffplay:
@@ -201,7 +212,7 @@ tasks:
   system:down:
     cmds:
       - task images:kill:remotely || true
-      - task voices:kill:remotely || true
+      - task voices:kill:day:remotely || true
     desc: __
 
   images:test:remotely:
