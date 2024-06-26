@@ -240,15 +240,12 @@ tasks:
 
   voices:night:play:
     vars:
-      VOLUME: '{{default "100" .VOLUME}}'
       SLEEP_AFTER_QUASI: '{{default "180" .SLEEP_AFTER_QUASI}}'
       SLEEP_AFTER_BI_CLUSTER: '{{default "180" .SLEEP_AFTER_BI_CLUSTER}}'
+    env:
+      SLEEP_AFTER_QUASI: "{{.SLEEP_AFTER_QUASI}}"
+      SLEEP_AFTER_BI_CLUSTER: "{{.SLEEP_AFTER_BI_CLUSTER}}"
     cmds:
-      - |
-        while true; do
-          task voices:night:play:quasi-still
-          sleep {{.SLEEP_AFTER_QUASI}}
-          voices:night:play:cello-no-two-bi-cluster
-          sleep {{.SLEEP_AFTER_BI_CLUSTER}}
-        done
+      - bash -c "tmux new-session -d -s voices_night_session './run-voices-night.sh | tee voices__bicluster_play__with-mvp.log'"
+      - sudo logrotate -f logrotate-voices__bicluster.conf
     desc: __
