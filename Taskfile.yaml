@@ -210,3 +210,34 @@ tasks:
       - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.TEST_FILE_SUFFIX}} pi.altar:{{.ALTAR_IMAGES_EXPORTS}}/{{.TEST_FILE_SUFFIX}}
       - task images:run:remotely INPUT="-- --args fileSuffix {{.TEST_FILE_SUFFIX}}"
     desc: __
+
+  voices:night:play:quasi-still:
+    vars:
+      VOLUME: '{{default "140" .VOLUME}}'
+      LOOP: '{{default "no" .LOOP}}'
+    cmds:
+      - mpv --no-video --loop={{.LOOP}} --volume={{.VOLUME}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 "{{.ALTAR_VOICES_EXPORTS}}/quasi-still-fade-in.wav"
+    desc: __
+
+  voices:night:play:cello-no-two-bi-cluster:
+    vars:
+      VOLUME: '{{default "100" .VOLUME}}'
+      LOOP: '{{default "no" .LOOP}}'
+    cmds:
+      - mpv --no-video --loop={{.LOOP}} --volume={{.VOLUME}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 "{{.ALTAR_VOICES_EXPORTS}}/cello-no-two-bi-cluster.wav" 
+    desc: __
+
+  voices:night:play-forever:
+    vars:
+      VOLUME: '{{default "100" .VOLUME}}'
+      SLEEP_AFTER_QUASI: '{{default "180" .SLEEP_AFTER_QUASI}}'
+      SLEEP_AFTER_BI_CLUSTER: '{{default "180" .SLEEP_AFTER_BI_CLUSTER}}'
+    cmds:
+      - |
+        while true; do
+          task voices:night:play:quasi-still
+          sleep {{.SLEEP_AFTER_QUASI}}
+          voices:night:play:cello-no-two-bi-cluster
+          sleep {{.SLEEP_AFTER_BI_CLUSTER}}
+        done
+    desc: __
