@@ -197,7 +197,7 @@ tasks:
       FP_PREFIX: '{{default .ALTAR_VOICES_EXPORTS .FP_PREFIX}}'
       FP_SUFFIX: '{{default "quasi-still-fade-in-2.wav" .FP_SUFFIX}}'
       FILE: '{{.FP_PREFIX}}/{{.FP_SUFFIX}}'
-      VOLUME: '{{default "140" .VOLUME}}'
+      VOLUME: '{{default "130" .VOLUME}}'
       LOOP: '{{default "no" .LOOP}}'
     cmds:
       - bash -c "tmux new-session -d -s mpv_quasi_session 'mpv --no-video --loop={{.LOOP}} --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__quasi_play__with-mvp.log'"
@@ -210,7 +210,7 @@ tasks:
       FP_PREFIX: '{{default .ALTAR_VOICES_EXPORTS .FP_PREFIX}}'
       FP_SUFFIX: '{{default "cello-no-two-bi-cluster.wav" .FP_SUFFIX}}'
       FILE: '{{.FP_PREFIX}}/{{.FP_SUFFIX}}'
-      VOLUME: '{{default "100" .VOLUME}}'
+      VOLUME: '{{default "73" .VOLUME}}'
       LOOP: '{{default "no" .LOOP}}'
     cmds:
       - bash -c "tmux new-session -d -s mpv_bicluster_session 'mpv --no-video --loop={{.LOOP}} --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__bicluster_play__with-mvp.log'"
