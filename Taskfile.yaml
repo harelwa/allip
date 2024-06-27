@@ -195,7 +195,7 @@ tasks:
     vars:
       START: '{{default "0" .START}}'
       FP_PREFIX: '{{default .ALTAR_VOICES_EXPORTS .FP_PREFIX}}'
-      FP_SUFFIX: '{{default "quasi-still-fade-in-2.wav" .FP_SUFFIX}}'
+      FP_SUFFIX: '{{default "quasi-still-fade-in-3.wav" .FP_SUFFIX}}'
       FILE: '{{.FP_PREFIX}}/{{.FP_SUFFIX}}'
       VOLUME: '{{default "130" .VOLUME}}'
       LOOP: '{{default "no" .LOOP}}'
