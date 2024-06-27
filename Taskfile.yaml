@@ -3,7 +3,16 @@
 version: '3'
 
 vars:
-  GREETING: Hello, World!
+  GREETING: hello altar
+  
+  MAC_PAWNS_COURT_FP: /Users/harelwahnich/Documents/works.and.docs/2024.amot/pawns.court
+  PIS_PAWNS_COURT_FP: /home/altar/pawns.court
+  
+  MAC_IMAGES_EXPORTS: '{{.MAC_PAWNS_COURT_FP}}/altar.aleph/exports'
+  ALTAR_IMAGES_EXPORTS: '{{.PIS_PAWNS_COURT_FP}}/altar.aleph/exports'
+  
+  MAC_VOICES_EXPORTS: '{{.MAC_PAWNS_COURT_FP}}/mofaim.audio/exsports'
+  ALTAR_VOICES_EXPORTS: '{{.PIS_PAWNS_COURT_FP}}/nazeret.audio'
 
 tasks:
   default:
@@ -11,7 +20,222 @@ tasks:
       - echo "{{.GREETING}}"
     silent: true
 
-  cenv:create:
+  cenv:allipy:create:
     desc: _
     cmds:
       - mamba create -y -n allip python=3.10 ipython jupyter pillow opencv gst-plugins-base gst-plugins-good gstreamer
+
+  images:play:with-processing:
+    cmds:
+      - bash -c "tmux new-session -d -s pr_session 'processing-java --sketch=$(realpath .) --output=/tmp/processing/test --force --run {{.CLI_ARGS}} | tee images__play__with-processing.log'"
+      - sudo logrotate -f logrotate-images.conf
+    env:
+      DISPLAY: ":0"
+    desc: |
+      with args example:
+
+      >$ task images:play:with-processing -- --args fileSuffix tests/D01.HAND.WHITE.mp4
+
+  images:kill:
+    cmds:
+      - ./kill-processing.sh
+    desc: __
+
+  images:run:remotely:
+    vars:
+      INPUT: '{{default "" .INPUT}}'
+    cmds:
+      - |
+        ssh altar@altar.local 'task -d /home/altar/repos/allip images:play:with-processing {{.INPUT}}'
+    desc: _
+
+  images:kill:remotely:
+    cmds:
+      - |
+        ssh -o ConnectTimeout=2 altar@altar.local 'task -d /home/altar/repos/allip images:kill'
+    desc: _
+
+  shutdown:altar-voices:remotely:
+    cmds:
+      - ssh -o ConnectTimeout=2 altar@altar-voices.local 'sudo shutdown -h now' || true
+    desc: __
+
+  shutdown:altar:remotely:
+    cmds:
+      - task images:kill:remotely || true
+      - ssh -o ConnectTimeout=2 altar@altar.local 'sudo shutdown -h now' || true
+    desc: __
+
+  shutdown:
+    deps:
+      - shutdown:altar:remotely
+      - shutdown:altar-voices:remotely
+    cmds:
+      - echo "pis are down"
+    desc: __
+    
+  voices:run:remotely:
+    vars:
+      INPUT: '{{default "" .INPUT}}'
+      TIME_OF_DAY: '{{default "day" .TIME_OF_DAY}}'
+    cmds:
+      - |
+        ssh altar@altar-voices.local 'nohup task -d /home/altar/repos/allip voices:{{.TIME_OF_DAY}}:play {{.INPUT}}'
+    desc: _
+
+  voices:kill:remotely:
+    cmds:
+      - |
+        ssh -o ConnectTimeout=2 altar@altar-voices.local 'task -d /home/altar/repos/allip voices:kill'
+    desc: _
+
+  voices:list-devices:
+    cmds:
+      - aplay -l
+    desc: _
+
+  voices:day:play:
+    vars:
+      START: '{{default "0" .START}}'
+      FP_PREFIX: '{{default .ALTAR_VOICES_EXPORTS .FP_PREFIX}}'
+      FP_SUFFIX: '{{default "D01.RC__02__vidWithAudio.mp4" .FP_SUFFIX}}'
+      FILE: '{{.FP_PREFIX}}/{{.FP_SUFFIX}}'
+      VOLUME: '{{default "100" .VOLUME}}'
+    cmds:
+      - bash -c "tmux new-session -d -s mpv_session 'mpv --no-video --loop=inf --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__play__with-mvp.log'"
+      - sudo logrotate -f logrotate-voices.conf
+    desc: |
+      Headphones = alsa/plughw:CARD=Headphones,DEV=0
+      DAC = alsa/plughw:CARD=DAC,DEV=0
+
+  voices:kill:
+    cmds:
+      - pkill tmux || true
+      - pkill mpv || true
+    desc: __
+  
+  list-displays:
+    cmds:
+      - |
+        DISPLAY=:0 xrandr --listmonitors
+    desc: _
+    silent: yes
+
+  list-network-devices:
+    cmds:
+      - sudo arp-scan --localnet --resolve
+    desc: _
+
+  video:loop:cvlc:
+    desc: |
+      # "--start-time=26 --stop-time=32"
+      # to control vlc, in a sperate terminal run:
+        >$ nc localhost 4212
+        then you can:
+         .. pause
+         .. play
+         .. stop
+         .. quit
+    env:
+      DISPLAY: ":0"
+    cmds:
+      - |
+        cvlc \
+          --extraintf rc \
+          --rc-host localhost:4212 \
+          --loop \
+          --fullscreen \
+          --no-video-title-show /home/altar/pawns.court/altar.aleph/exports/D01.HAND.w.LAMP__HAND.and.WHITE.mp4__FULL_FRAME.mp4
+
+  bwv1006:ly:build:
+    vars:
+      FILE_NAME: '{{default "bwv-1006-cello" .FILE_NAME}}'
+    cmds:
+      - lilypond -s bwv.1006/{{.FILE_NAME}}.ly
+      - mv {{.FILE_NAME}}.pdf bwv.1006/
+      - open bwv.1006/{{.FILE_NAME}}.pdf
+    desc: __
+  
+
+  changes:broadcasts-to-altars:
+    cmds:
+      - git pull --rebase
+      - git push
+      - ssh -o ConnectTimeout=2 altar@altar.local 'cd /home/altar/repos/allip && git pull --rebase'
+      - ssh -o ConnectTimeout=2 altar@altar-voices.local 'cd /home/altar/repos/allip && git pull --rebase'
+    desc: __
+
+  system:up:synced-ish:
+    cmds:
+      - task images:run:remotely
+      - echo "after images:run:remotely"
+      - sleep 12.5
+      - task voices:run:remotely
+      - echo "after images:run:remotely"
+    desc: __
+
+  system:down:
+    cmds:
+      - task images:kill:remotely || true
+      - task voices:kill:remotely || true
+    desc: __
+
+  images:test:remotely:
+    vars:
+      TEST_FILE_SUFFIX: '{{default "tests/D01.HAND.WHITE.mp4" .TEST_FILE_SUFFIX}}'
+    cmds:
+      - task images:kill:remotely
+      - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.TEST_FILE_SUFFIX}} pi.altar:{{.ALTAR_IMAGES_EXPORTS}}/{{.TEST_FILE_SUFFIX}}
+      - task images:run:remotely INPUT="-- --args fileSuffix {{.TEST_FILE_SUFFIX}}"
+    desc: __
+
+  voices:night:play:quasi-still:
+    vars:
+      START: '{{default "0" .START}}'
+      FP_PREFIX: '{{default .ALTAR_VOICES_EXPORTS .FP_PREFIX}}'
+      FP_SUFFIX: '{{default "quasi-still-fade-in-2.wav" .FP_SUFFIX}}'
+      FILE: '{{.FP_PREFIX}}/{{.FP_SUFFIX}}'
+      VOLUME: '{{default "140" .VOLUME}}'
+      LOOP: '{{default "no" .LOOP}}'
+    cmds:
+      - bash -c "tmux new-session -d -s mpv_quasi_session 'mpv --no-video --loop={{.LOOP}} --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__quasi_play__with-mvp.log'"
+      - sudo logrotate -f logrotate-voices__quasi.conf
+    desc: __
+
+  voices:night:play:cello-no-two-bi-cluster:
+    vars:
+      START: '{{default "0" .START}}'
+      FP_PREFIX: '{{default .ALTAR_VOICES_EXPORTS .FP_PREFIX}}'
+      FP_SUFFIX: '{{default "cello-no-two-bi-cluster.wav" .FP_SUFFIX}}'
+      FILE: '{{.FP_PREFIX}}/{{.FP_SUFFIX}}'
+      VOLUME: '{{default "100" .VOLUME}}'
+      LOOP: '{{default "no" .LOOP}}'
+    cmds:
+      - bash -c "tmux new-session -d -s mpv_bicluster_session 'mpv --no-video --loop={{.LOOP}} --volume={{.VOLUME}} --start={{.START}} --audio-device=alsa/plughw:CARD=DAC,DEV=0 $(realpath {{.FILE}}) | tee voices__bicluster_play__with-mvp.log'"
+      - sudo logrotate -f logrotate-voices__bicluster.conf
+    desc: __
+
+  voices:night:play:
+    vars:
+      SLEEP_AFTER_QUASI: '{{default "180" .SLEEP_AFTER_QUASI}}'
+      SLEEP_AFTER_BI_CLUSTER: '{{default "180" .SLEEP_AFTER_BI_CLUSTER}}'
+    env:
+      SLEEP_AFTER_QUASI: "{{.SLEEP_AFTER_QUASI}}"
+      SLEEP_AFTER_BI_CLUSTER: "{{.SLEEP_AFTER_BI_CLUSTER}}"
+    cmds:
+      - bash -c "tmux new-session -d -s voices_night_session './run-voices-night.sh | tee voices__bicluster_play__with-mvp.log'"
+      - sudo logrotate -f logrotate-voices__bicluster.conf
+    desc: __
+
+  spread:day:files:
+    vars:
+      RC_VERSION: 02
+      IMAGE_FN: "D01.RC__{{.RC_VERSION}}__vidOnly.mp4"
+      VOICES_FN: "D01.RC__{{.RC_VERSION}}__vidWithAudio.mp4"
+
+    cmds:
+      - test -f {{.MAC_IMAGES_EXPORTS}}/{{.IMAGE_FN}}
+      - test -f {{.MAC_IMAGES_EXPORTS}}/{{.VOICES_FN}}
+      - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.IMAGE_FN}}  pi.altar:{{.ALTAR_IMAGES_EXPORTS}}/{{.IMAGE_FN}}
+      - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.VOICES_FN}} pi.voices:{{.ALTAR_VOICES_EXPORTS}}/{{.VOICES_FN}}
+    desc: ___
