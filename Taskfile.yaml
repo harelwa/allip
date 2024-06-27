@@ -166,11 +166,13 @@ tasks:
     desc: __
 
   system:up:synced-ish:
+    vars:
+      TIME_OF_DAY: '{{default "day" .TIME_OF_DAY}}'
     cmds:
       - task images:run:remotely
       - echo "after images:run:remotely"
       - sleep 12.5
-      - task voices:run:remotely
+      - task voices:run:remotely TIME_OF_DAY={{.TIME_OF_DAY}}
       - echo "after images:run:remotely"
     desc: __
 
