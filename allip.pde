@@ -39,6 +39,9 @@ int lm_134_x = 100;
 int lm_134_y = 462;
 
 PVector lm_134 = new PVector(596, 20);
+PVector lm_167 = new PVector(500, 500);
+PVector lm_164 = new PVector(596, 308);
+PVector lm_161 = new PVector(692, 308);
 
 void setup() {
     printArgs("setup");
