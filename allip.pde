@@ -23,27 +23,29 @@ String videosFolder;
 // DEBUG
 boolean printInArgExists = false;
 
-// 101
-int lm_101_x = 100;
-int lm_101_y = 462;
-// 015
-// PVector lm_015 = new PVector(500, 368)
-int lm_015_x = 500;
-int lm_015_y = 368;
-// 182
-int lm_182_x = 596;
-int lm_182_y = 176;
+// LED units dims
+int lmu_w = 96;
+int lmu_h = 96;
 
-// 134 WIP
-int lm_134_x = 100;
-int lm_134_y = 462;
+// altar.a
+// | 015 |
+// -------
+// | 182 |
+PVector lm_015 = new PVector(500, 368);
+PVector lm_182 = new PVector(596, 176);
 
-PVector lm_134 = new PVector(596, 20);
+// altar.b
+// | 167 | 164 |
+// -------------
+// | 161 | 101 |
+// -------------
+// | 134 | 162 |
 PVector lm_167 = new PVector(500, 500);
-PVector lm_164 = new PVector(596, 308);
 PVector lm_161 = new PVector(692, 308);
-PVector lm_162 = new PVector(692, 212);
+PVector lm_134 = new PVector(596, 20);
+PVector lm_164 = new PVector(596, 308);
 PVector lm_101 = new PVector(596, 404);
+PVector lm_162 = new PVector(692, 212);
 
 void setup() {
     printArgs("setup");
@@ -57,14 +59,21 @@ void setup() {
 
     setCalibCoordinatesArgValue();
     
-    defineVideosFolder();
-    println("OS := " + System.getProperty("os.name"));
-    println("videos folder := " + videosFolder);
-    String videoFilePathSuffix = "D01.RC__02__vidOnly.mp4";
-    if (inArgExists("fileSuffix")) {
-        videoFilePathSuffix = getKWArgValue("fileSuffix");
+    String videoFile = "";
+
+    if(inArgExists("fileFullPath")) {
+        videoFile = getKWArgValue("fileFullPath");
+    } else {
+        defineVideosFolder();
+        println("OS := " + System.getProperty("os.name"));
+        println("videos folder := " + videosFolder);
+        String videoFilePathSuffix = "D01.RC__02__vidOnly.mp4";
+        if (inArgExists("fileSuffix")) {
+            videoFilePathSuffix = getKWArgValue("fileSuffix");
+        }
+        videoFile = videosFolder + "/" + videoFilePathSuffix;
     }
-    String videoFile = videosFolder + "/" + videoFilePathSuffix;
+
     println("video file := " + videoFile);
     
     // Check if the video file exists
@@ -133,18 +142,25 @@ void draw() {
     } else if (isTestCalib()) {
         println("test calib for (x, y) = (" + ploc.x + ", " + ploc.y + ")");
         image(myMovie, ploc.x, ploc.y, 96, 96, 0, 0, 96, 96);
+    } else if (isAltarA()) {
+        // | 015 |
+        // -------
+        // | 182 |
+        image(myMovie, lm_015.x, lm_015.y, lmu_w, lmu_h, 0, 0, 96, 96);
+        image(myMovie, lm_182.x, lm_182.y, lmu_w, lmu_h, 0, 96, 96, 192);
     } else {
-        // int lm_015_x = 500;
-        // int lm_015_y = 368;
-        
-        // Display the upper half of the video without scaling
-        image(myMovie, lm_015_x, lm_015_y, 96, 96, 0, 0, 96, 96);
+        // | 167 | 164 |
+        // -------------
+        // | 161 | 101 |
+        // -------------
+        // | 134 | 162 |
+        image(myMovie, lm_167.x, lm_167.y, lmu_w, lmu_h, 0, 0, 96, 96);
+        image(myMovie, lm_161.x, lm_161.y, lmu_w, lmu_h, 0, 96, 96, 192);
+        image(myMovie, lm_134.x, lm_134.y, lmu_w, lmu_h, 0, 192, 96, 288);
 
-        // int lm_182_x = 596;
-        // int lm_182_y = 176;
-
-        // Display the lower half of the video without scaling
-        image(myMovie, lm_182_x, lm_182_y, 96, 96, 0, 96, 96, 192);
+        image(myMovie, lm_164.x, lm_164.y, lmu_w, lmu_h, 96, 0, 192, 96);
+        image(myMovie, lm_101.x, lm_101.y, lmu_w, lmu_h, 96, 96, 192, 192);
+        image(myMovie, lm_162.x, lm_162.y, lmu_w, lmu_h, 96, 192, 192, 288);
     }
 }
 
@@ -260,6 +276,11 @@ boolean isCalib() {
 
 boolean isTestCalib() {
     boolean res = inArgExists("testcalib");
+    return res;
+}
+
+boolean isAltarA() {
+    boolean res = inArgExists("altar-a");
     return res;
 }
 
