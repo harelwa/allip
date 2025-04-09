@@ -31,8 +31,8 @@ int lmu_h = 96;
 // | 015 |
 // -------
 // | 182 |
-PVector lm_015 = new PVector(500, 368);
-PVector lm_182 = new PVector(596, 176);
+PVector lm_015 = new PVector(500, 368 + 18 + 10 + 8);//368);
+PVector lm_182 = new PVector(596, 176 + 18 + 10 + 8);//176);
 
 // altar.b
 // | 167 | 164 |
