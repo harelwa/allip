@@ -148,7 +148,12 @@ void draw() {
         // | 182 |
         image(myMovie, lm_015.x, lm_015.y, lmu_w, lmu_h, 0, 0, 96, 96);
         image(myMovie, lm_182.x, lm_182.y, lmu_w, lmu_h, 0, 96, 96, 192);
-    } else {
+    } else if (isAltarB0()) {
+        // | 015 | 182 |
+        // -------------
+        image(myMovie, lm_015.x, lm_015.y, lmu_w, lmu_h, 0, 0, 96, 96);
+        image(myMovie, lm_182.x, lm_182.y, lmu_w, lmu_h, 96, 0, 192, 96);
+    } else if (isAltarB1()) {
         // | 167 | 164 |
         // -------------
         // | 161 | 101 |
@@ -161,6 +166,19 @@ void draw() {
         image(myMovie, lm_164.x, lm_164.y, lmu_w, lmu_h, 96, 0, 192, 96);
         image(myMovie, lm_101.x, lm_101.y, lmu_w, lmu_h, 96, 96, 192, 192);
         image(myMovie, lm_162.x, lm_162.y, lmu_w, lmu_h, 96, 192, 192, 288);
+    } else if (isAltarB2()) {
+        // | 164 | 167 |
+        // -------------
+        // | 101 | 161 |
+        // -------------
+        // | 162 | 134 |
+        image(myMovie, lm_164.x, lm_164.y, lmu_w, lmu_h, 0, 0, 96, 96);
+        image(myMovie, lm_101.x, lm_101.y, lmu_w, lmu_h, 0, 96, 96, 192);
+        image(myMovie, lm_162.x, lm_162.y, lmu_w, lmu_h, 0, 192, 96, 288);
+
+        image(myMovie, lm_167.x, lm_167.y, lmu_w, lmu_h, 96, 0, 192, 96);
+        image(myMovie, lm_161.x, lm_161.y, lmu_w, lmu_h, 96, 96, 192, 192);
+        image(myMovie, lm_134.x, lm_134.y, lmu_w, lmu_h, 96, 192, 192, 288);
     }
 }
 
@@ -281,6 +299,21 @@ boolean isTestCalib() {
 
 boolean isAltarA() {
     boolean res = inArgExists("altar-a");
+    return res;
+}
+
+boolean isAltarB1() {
+    boolean res = inArgExists("altar-b1");
+    return res;
+}
+
+boolean isAltarB0() {
+    boolean res = inArgExists("altar-b0");
+    return res;
+}
+
+boolean isAltarB2() {
+    boolean res = inArgExists("altar-b2");
     return res;
 }
 
