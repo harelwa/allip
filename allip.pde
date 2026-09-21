@@ -28,6 +28,7 @@ int lmu_w = 96;
 int lmu_h = 96;
 
 // altar.a
+// 96 × 192
 // | 015 |
 // -------
 // | 182 |
@@ -35,6 +36,7 @@ PVector lm_015 = new PVector(500, 368 + 18 + 10 + 8);//368);
 PVector lm_182 = new PVector(596, 176 + 18 + 10 + 8);//176);
 
 // altar.b
+// 192 × 288
 // | 167 | 164 |
 // -------------
 // | 161 | 101 |
@@ -46,6 +48,14 @@ PVector lm_134 = new PVector(596, 20);
 PVector lm_164 = new PVector(596, 308);
 PVector lm_101 = new PVector(596, 404);
 PVector lm_162 = new PVector(692, 212);
+
+// altar.c
+// 384 × 192
+// -------------------------
+// | 134 | 161 | 182 | 015 |
+// -------------------------
+// | 167 | 101 | 162 | 164 |
+// -------------------------
 
 void setup() {
     printArgs("setup");
@@ -143,22 +153,30 @@ void draw() {
         println("test calib for (x, y) = (" + ploc.x + ", " + ploc.y + ")");
         image(myMovie, ploc.x, ploc.y, 96, 96, 0, 0, 96, 96);
     } else if (isAltarA()) {
+        // 96 × 192
+        // -------
         // | 015 |
         // -------
         // | 182 |
+        // -------
         image(myMovie, lm_015.x, lm_015.y, lmu_w, lmu_h, 0, 0, 96, 96);
         image(myMovie, lm_182.x, lm_182.y, lmu_w, lmu_h, 0, 96, 96, 192);
     } else if (isAltarB0()) {
+        // 192 × 96
+        // -------------
         // | 015 | 182 |
         // -------------
         image(myMovie, lm_015.x, lm_015.y, lmu_w, lmu_h, 0, 0, 96, 96);
         image(myMovie, lm_182.x, lm_182.y, lmu_w, lmu_h, 96, 0, 192, 96);
     } else if (isAltarB1()) {
+        // 192 × 288
+        // -------------
         // | 167 | 164 |
         // -------------
         // | 161 | 101 |
         // -------------
         // | 134 | 162 |
+        // -------------
         image(myMovie, lm_167.x, lm_167.y, lmu_w, lmu_h, 0, 0, 96, 96);
         image(myMovie, lm_161.x, lm_161.y, lmu_w, lmu_h, 0, 96, 96, 192);
         image(myMovie, lm_134.x, lm_134.y, lmu_w, lmu_h, 0, 192, 96, 288);
@@ -167,11 +185,14 @@ void draw() {
         image(myMovie, lm_101.x, lm_101.y, lmu_w, lmu_h, 96, 96, 192, 192);
         image(myMovie, lm_162.x, lm_162.y, lmu_w, lmu_h, 96, 192, 192, 288);
     } else if (isAltarB2()) {
+        // 192 × 288
+        // -------------
         // | 164 | 167 |
         // -------------
         // | 101 | 161 |
         // -------------
         // | 162 | 134 |
+        // -------------
         image(myMovie, lm_164.x, lm_164.y, lmu_w, lmu_h, 0, 0, 96, 96);
         image(myMovie, lm_101.x, lm_101.y, lmu_w, lmu_h, 0, 96, 96, 192);
         image(myMovie, lm_162.x, lm_162.y, lmu_w, lmu_h, 0, 192, 96, 288);
@@ -179,6 +200,21 @@ void draw() {
         image(myMovie, lm_167.x, lm_167.y, lmu_w, lmu_h, 96, 0, 192, 96);
         image(myMovie, lm_161.x, lm_161.y, lmu_w, lmu_h, 96, 96, 192, 192);
         image(myMovie, lm_134.x, lm_134.y, lmu_w, lmu_h, 96, 192, 192, 288);
+    } else if (isAltarC()) {
+        // 384 × 192
+        // -------------------------
+        // | 134 | 161 | 182 | 015 |
+        // -------------------------
+        // | 167 | 101 | 162 | 164 |
+        // -------------------------
+        image(myMovie, lm_134.x, lm_134.y, lmu_w, lmu_h, 0, 0, 96, 96);
+        image(myMovie, lm_167.x, lm_167.y, lmu_w, lmu_h, 0, 96, 96, 192);
+        image(myMovie, lm_161.x, lm_161.y, lmu_w, lmu_h, 96, 0, 192, 96);
+        image(myMovie, lm_101.x, lm_101.y, lmu_w, lmu_h, 96, 96, 192, 192);
+        image(myMovie, lm_182.x, lm_182.y, lmu_w, lmu_h, 192, 0, 288, 96);
+        image(myMovie, lm_162.x, lm_162.y, lmu_w, lmu_h, 192, 96, 288, 192);
+        image(myMovie, lm_015.x, lm_015.y, lmu_w, lmu_h, 288, 0, 384, 96);
+        image(myMovie, lm_164.x, lm_164.y, lmu_w, lmu_h, 288, 96, 384, 192);
     }
 }
 
@@ -186,7 +222,6 @@ void draw() {
 void movieEvent(Movie m) {
     m.read();
 }
-
 
 /* HELPERS */
 
@@ -314,6 +349,11 @@ boolean isAltarB0() {
 
 boolean isAltarB2() {
     boolean res = inArgExists("altar-b2");
+    return res;
+}
+
+boolean isAltarC() {
+    boolean res = inArgExists("altar-c");
     return res;
 }
 
