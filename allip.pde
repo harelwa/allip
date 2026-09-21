@@ -11,6 +11,8 @@ int time;
 int locx = 0;
 int locy = 0;
 
+PVector ploc = new PVector(0, 0);
+
 // Variables for the videos folder
 String homeDir = System.getProperty("user.home");
 String videosFolderMac = homeDir + "/Documents/works.and.docs/2024.amot/pawns.court/altar.aleph/exports";
@@ -19,7 +21,31 @@ String videosFolder;
 
 
 // DEBUG
-boolean printInArgExists = true;
+boolean printInArgExists = false;
+
+// LED units dims
+int lmu_w = 96;
+int lmu_h = 96;
+
+// altar.a
+// | 015 |
+// -------
+// | 182 |
+PVector lm_015 = new PVector(500, 368 + 18 + 10 + 8);//368);
+PVector lm_182 = new PVector(596, 176 + 18 + 10 + 8);//176);
+
+// altar.b
+// | 167 | 164 |
+// -------------
+// | 161 | 101 |
+// -------------
+// | 134 | 162 |
+PVector lm_167 = new PVector(500, 500);
+PVector lm_161 = new PVector(692, 308);
+PVector lm_134 = new PVector(596, 20);
+PVector lm_164 = new PVector(596, 308);
+PVector lm_101 = new PVector(596, 404);
+PVector lm_162 = new PVector(692, 212);
 
 void setup() {
     printArgs("setup");
@@ -30,15 +56,24 @@ void setup() {
     if (isDry()) {
         return;
     }
+
+    setCalibCoordinatesArgValue();
     
-    defineVideosFolder();
-    println("OS := " + System.getProperty("os.name"));
-    println("videos folder := " + videosFolder);
-    String videoFilePathSuffix = "D01.RC__02__vidOnly.mp4";
-    if (inArgExists("fileSuffix")) {
-        videoFilePathSuffix = getKWArgValue("fileSuffix");
+    String videoFile = "";
+
+    if(inArgExists("fileFullPath")) {
+        videoFile = getKWArgValue("fileFullPath");
+    } else {
+        defineVideosFolder();
+        println("OS := " + System.getProperty("os.name"));
+        println("videos folder := " + videosFolder);
+        String videoFilePathSuffix = "D01.RC__02__vidOnly.mp4";
+        if (inArgExists("fileSuffix")) {
+            videoFilePathSuffix = getKWArgValue("fileSuffix");
+        }
+        videoFile = videosFolder + "/" + videoFilePathSuffix;
     }
-    String videoFile = videosFolder + "/" + videoFilePathSuffix;
+
     println("video file := " + videoFile);
     
     // Check if the video file exists
@@ -48,8 +83,8 @@ void setup() {
     }
     
     // Set a windowed size for development
+    fullScreen(P2D);
     size(800, 600, P2D);
-    
     
     // Load the 96x192 video file
     myMovie = new Movie(this, videoFile);
@@ -92,30 +127,58 @@ void draw() {
     if (isCalib()) {
         if ((millis() - time) > 800) {
             time = millis();
-            locx = locx + 50;
-            println("calib curr (x, y) = (" + locx + ", " + locy + ")");
-            if (locx > (800 - 96)) {
-                locx = 0;
-                locy = locy + 50;
+            ploc.x = ploc.x + 50;
+            println("calib curr (x, y) = (" + ploc.x + ", " + ploc.y + ")");
+            if (ploc.x > (800 - 96)) {
+                ploc.x = 0;
+                ploc.y = ploc.y + 50;
             } 
-            if (locy > (600 - 96)) {
-                locy = 0;
+            if (ploc.y > (600 - 96)) {
+                ploc.y = 0;
             }
         }
         // Display the upper half of the video without scaling
-        image(myMovie, locx, locy, 96, 96, 0, 0, 96, 96);
-    } else {
-        int lm_015_x = 500;
-        int lm_015_y = 368;
-        
-        // Display the upper half of the video without scaling
-        image(myMovie, lm_015_x, lm_015_y, 96, 96, 0, 0, 96, 96);
+        image(myMovie, ploc.x, ploc.y, 96, 96, 0, 0, 96, 96);
+    } else if (isTestCalib()) {
+        println("test calib for (x, y) = (" + ploc.x + ", " + ploc.y + ")");
+        image(myMovie, ploc.x, ploc.y, 96, 96, 0, 0, 96, 96);
+    } else if (isAltarA()) {
+        // | 015 |
+        // -------
+        // | 182 |
+        image(myMovie, lm_015.x, lm_015.y, lmu_w, lmu_h, 0, 0, 96, 96);
+        image(myMovie, lm_182.x, lm_182.y, lmu_w, lmu_h, 0, 96, 96, 192);
+    } else if (isAltarB0()) {
+        // | 015 | 182 |
+        // -------------
+        image(myMovie, lm_015.x, lm_015.y, lmu_w, lmu_h, 0, 0, 96, 96);
+        image(myMovie, lm_182.x, lm_182.y, lmu_w, lmu_h, 96, 0, 192, 96);
+    } else if (isAltarB1()) {
+        // | 167 | 164 |
+        // -------------
+        // | 161 | 101 |
+        // -------------
+        // | 134 | 162 |
+        image(myMovie, lm_167.x, lm_167.y, lmu_w, lmu_h, 0, 0, 96, 96);
+        image(myMovie, lm_161.x, lm_161.y, lmu_w, lmu_h, 0, 96, 96, 192);
+        image(myMovie, lm_134.x, lm_134.y, lmu_w, lmu_h, 0, 192, 96, 288);
 
-        int lm_182_x = 596;
-        int lm_182_y = 176;
+        image(myMovie, lm_164.x, lm_164.y, lmu_w, lmu_h, 96, 0, 192, 96);
+        image(myMovie, lm_101.x, lm_101.y, lmu_w, lmu_h, 96, 96, 192, 192);
+        image(myMovie, lm_162.x, lm_162.y, lmu_w, lmu_h, 96, 192, 192, 288);
+    } else if (isAltarB2()) {
+        // | 164 | 167 |
+        // -------------
+        // | 101 | 161 |
+        // -------------
+        // | 162 | 134 |
+        image(myMovie, lm_164.x, lm_164.y, lmu_w, lmu_h, 0, 0, 96, 96);
+        image(myMovie, lm_101.x, lm_101.y, lmu_w, lmu_h, 0, 96, 96, 192);
+        image(myMovie, lm_162.x, lm_162.y, lmu_w, lmu_h, 0, 192, 96, 288);
 
-        // Display the lower half of the video without scaling
-        image(myMovie, lm_182_x, lm_182_y, 96, 96, 0, 96, 96, 192);
+        image(myMovie, lm_167.x, lm_167.y, lmu_w, lmu_h, 96, 0, 192, 96);
+        image(myMovie, lm_161.x, lm_161.y, lmu_w, lmu_h, 96, 96, 192, 192);
+        image(myMovie, lm_134.x, lm_134.y, lmu_w, lmu_h, 96, 192, 192, 288);
     }
 }
 
@@ -198,6 +261,22 @@ String getKWArgValue(String kwarg_name) {
     return kwarg_value;
 }
 
+void setCalibCoordinatesArgValue() {
+    int x_value = locx;
+    int y_value = locy;
+    
+    String s_x = getKWArgValue("x");
+    String s_y = getKWArgValue("y");
+    
+    if (!s_x.equalsIgnoreCase("UNDEFINED")) {
+        ploc.x = int(s_x);
+    }
+
+    if (!s_y.equalsIgnoreCase("UNDEFINED")) {
+        ploc.y = int(s_y);
+    }
+}
+
 boolean isDry() { 
     boolean res = inArgExists("dry");
     return res;
@@ -210,6 +289,31 @@ boolean isDebug() {
 
 boolean isCalib() {
     boolean res = inArgExists("calib");
+    return res;
+}
+
+boolean isTestCalib() {
+    boolean res = inArgExists("testcalib");
+    return res;
+}
+
+boolean isAltarA() {
+    boolean res = inArgExists("altar-a");
+    return res;
+}
+
+boolean isAltarB1() {
+    boolean res = inArgExists("altar-b1");
+    return res;
+}
+
+boolean isAltarB0() {
+    boolean res = inArgExists("altar-b0");
+    return res;
+}
+
+boolean isAltarB2() {
+    boolean res = inArgExists("altar-b2");
     return res;
 }
 

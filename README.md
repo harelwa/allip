@@ -87,3 +87,26 @@ run no. 1 = 16.07
 run no. 2 = 12.22
 run no. 3 = 12.21
 run no. 4 = 13.02
+
+### Processing "full screen"
+
+to get rid of `pi` task bar set `autohide` and `autohide_duration`
+
+```bash
+>$ cat ~/.config/wf-panel-pi.ini
+[panel]
+launcher_000001=lxde-x-www-browser.desktop
+launcher_000002=pcmanfm.desktop
+launcher_000003=lxterminal.desktop
+position=top
+icon_size=16
+window-list_max_width=200
+monitor=HDMI-A-1
+autohide = true
+autohide_duration = 300
+```
+
+ref .1 <https://github.com/WayfireWM/wf-shell/blob/master/wf-shell.ini.example>
+
+ref .2 <https://forums.raspberrypi.com/viewtopic.php?t=358654>
+
