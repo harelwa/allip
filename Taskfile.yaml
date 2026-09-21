@@ -122,8 +122,10 @@ tasks:
     silent: yes
 
   list-network-devices:
+    vars:
+      INTERFACE: '{{default "en0" .INTERFACE}}'
     cmds:
-      - sudo arp-scan --localnet --resolve
+      - sudo arp-scan --interface {{.INTERFACE}} --localnet --resolve
     desc: _
 
   video:loop:cvlc:
