@@ -57,6 +57,17 @@ PVector lm_162 = new PVector(692, 212);
 // | 167 | 101 | 162 | 164 |
 // -------------------------
 
+// altar.c2
+// 288 × 192
+// -------------------
+// | 134 | 164 | 015 |
+// -------------------
+// | 167 | 161 | 182 |
+// -------------------
+// 101 - has blue upper left corner ( when infront of me )
+// 162 - has yellow upper left corner ( when infront of me )
+// i will place them aside for now to test the 2x3 image
+
 void setup() {
     printArgs("setup");
     startTime = millis();
@@ -209,12 +220,30 @@ void draw() {
         // -------------------------
         image(myMovie, lm_134.x, lm_134.y, lmu_w, lmu_h, 0, 0, 96, 96);
         image(myMovie, lm_167.x, lm_167.y, lmu_w, lmu_h, 0, 96, 96, 192);
+        
         image(myMovie, lm_161.x, lm_161.y, lmu_w, lmu_h, 96, 0, 192, 96);
         image(myMovie, lm_101.x, lm_101.y, lmu_w, lmu_h, 96, 96, 192, 192);
+        
         image(myMovie, lm_182.x, lm_182.y, lmu_w, lmu_h, 192, 0, 288, 96);
         image(myMovie, lm_162.x, lm_162.y, lmu_w, lmu_h, 192, 96, 288, 192);
+        
         image(myMovie, lm_015.x, lm_015.y, lmu_w, lmu_h, 288, 0, 384, 96);
         image(myMovie, lm_164.x, lm_164.y, lmu_w, lmu_h, 288, 96, 384, 192);
+    } else if (isAltarC2()) {
+        // 288 × 192
+        // -------------------
+        // | 134 | 164 | 015 |
+        // -------------------
+        // | 167 | 161 | 182 |
+        // -------------------
+        image(myMovie, lm_134.x, lm_134.y, lmu_w, lmu_h, 0, 0, 96, 96);
+        image(myMovie, lm_167.x, lm_167.y, lmu_w, lmu_h, 0, 96, 96, 192);
+
+        image(myMovie, lm_164.x, lm_164.y, lmu_w, lmu_h, 96, 0, 192, 96);
+        image(myMovie, lm_161.x, lm_161.y, lmu_w, lmu_h, 96, 96, 192, 192);
+
+        image(myMovie, lm_015.x, lm_015.y, lmu_w, lmu_h, 192, 0, 288, 96);
+        image(myMovie, lm_182.x, lm_182.y, lmu_w, lmu_h, 192, 96, 288, 192);
     }
 }
 
@@ -354,6 +383,11 @@ boolean isAltarB2() {
 
 boolean isAltarC() {
     boolean res = inArgExists("altar-c");
+    return res;
+}
+
+boolean isAltarC2() {
+    boolean res = inArgExists("altar-c2");
     return res;
 }
 
