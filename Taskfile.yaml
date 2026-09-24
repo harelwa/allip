@@ -4,6 +4,7 @@ version: '3'
 
 vars:
   GREETING: hello altar
+  ALTAR_IP: 172.20.10.4
   
   MAC_PAWNS_COURT_FP: /Users/harelwahnich/Documents/works.and.docs/2024.amot/pawns.court
   PIS_PAWNS_COURT_FP: /home/altar/pawns.court
@@ -26,8 +27,10 @@ tasks:
       - mamba create -y -n allip python=3.10 ipython jupyter pillow opencv gst-plugins-base gst-plugins-good gstreamer
 
   images:play:with-processing:
+    vars:
+      ALTAR_MODE: '{{default "altar-a" .ALTAR_MODE}}'
     cmds:
-      - bash -c "tmux new-session -d -s pr_session 'processing-java --sketch=$(realpath .) --output=/tmp/processing/test --force --run {{.CLI_ARGS}} altar-a | tee images__play__with-processing.log'"
+      - bash -c "tmux new-session -d -s pr_session 'processing-java --sketch=$(realpath .) --output=/tmp/processing/test --force --run {{.CLI_ARGS}} {{.ALTAR_MODE}} | tee images__play__with-processing.log'"
       - sudo logrotate -f logrotate-images.conf
     env:
       DISPLAY: ":0"
@@ -44,9 +47,10 @@ tasks:
   images:run:remotely:
     vars:
       INPUT: '{{default "" .INPUT}}'
+      ALTAR_MODE: '{{default "altar-a" .ALTAR_MODE}}'
     cmds:
       - |
-        ssh altar@altar.local 'task -d /home/altar/repos/allip images:play:with-processing {{.INPUT}}'
+        ssh altar@{{.ALTAR_IP}} 'task -d /home/altar/repos/allip images:play:with-processing ALTAR_MODE={{.ALTAR_MODE}} {{.INPUT}}'
     desc: _
 
   images:kill:remotely:
@@ -243,3 +247,8 @@ tasks:
       - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.IMAGE_FN}}  pi.altar:{{.ALTAR_IMAGES_EXPORTS}}/{{.IMAGE_FN}}
       - rclone copyto {{.MAC_IMAGES_EXPORTS}}/{{.VOICES_FN}} pi.voices:{{.ALTAR_VOICES_EXPORTS}}/{{.VOICES_FN}}
     desc: ___
+
+  sync-media-dir:
+    desc: Sync local interior media to the Pi
+    cmds:
+      - rsync -av --progress /Users/harelw/Documents/works.and.docs/2026.vision.of.visions/interior/ altar@{{.ALTAR_IP}}:/home/altar/data/avovha/
