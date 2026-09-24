@@ -249,6 +249,6 @@ tasks:
     desc: ___
 
   sync-media-dir:
-    desc: Sync local interior media to the Pi
+    desc: Mirror local interior media to the Pi
     cmds:
-      - rsync -av --progress /Users/harelw/Documents/works.and.docs/2026.vision.of.visions/interior/ altar@{{.ALTAR_IP}}:/home/altar/data/avovha/
+      - rsync -av --delete --progress /Users/harelw/Documents/works.and.docs/2026.vision.of.visions/interior/ altar@{{.ALTAR_IP}}:/home/altar/data/avovha/
