@@ -171,6 +171,11 @@ tasks:
       - ssh -o ConnectTimeout=2 altar@altar-voices.local 'cd /home/altar/repos/allip && git pull --rebase'
     desc: __
 
+  pull-rebase-allip-on-pi:
+    desc: Pull and rebase the allip repo on the Pi
+    cmds:
+      - ssh altar@{{.ALTAR_IP}} 'git -C /home/altar/repos/allip pull --rebase'
+
   system:up:synced-ish:
     vars:
       TIME_OF_DAY: '{{default "day" .TIME_OF_DAY}}'
