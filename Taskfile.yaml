@@ -47,7 +47,7 @@ tasks:
   images:run:remotely:
     vars:
       INPUT: '{{default "" .INPUT}}'
-      ALTAR_MODE: '{{default "altar-a" .ALTAR_MODE}}'
+      ALTAR_MODE: '{{default "altar-c2" .ALTAR_MODE}}'
     cmds:
       - |
         ssh altar@{{.ALTAR_IP}} 'task -d /home/altar/repos/allip images:play:with-processing ALTAR_MODE={{.ALTAR_MODE}} {{.INPUT}}'
