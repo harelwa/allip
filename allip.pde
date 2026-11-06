@@ -28,9 +28,11 @@ int lmu_w = 96;
 int lmu_h = 96;
 
 // Solid color for bride mode. Edit these RGB values (0-255).
-int brideRed = 142;
-int brideGreen = 142;
-int brideBlue = 142;
+// era's chick RGB values (142, 142, 142) - a light gray color
+
+int brideRed = 166;
+int brideGreen = 166;
+int brideBlue = 166;
 
 // altar.a
 // 96 × 192
