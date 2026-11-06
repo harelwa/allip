@@ -28,9 +28,9 @@ int lmu_w = 96;
 int lmu_h = 96;
 
 // Solid color for bride mode. Edit these RGB values (0-255).
-int brideRed = 113;
-int brideGreen = 104;
-int brideBlue = 85;
+int brideRed = 245;
+int brideGreen = 245;
+int brideBlue = 245;
 
 // altar.a
 // 96 × 192
