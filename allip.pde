@@ -27,6 +27,11 @@ boolean printInArgExists = false;
 int lmu_w = 96;
 int lmu_h = 96;
 
+// Solid color for bride mode. Edit these RGB values (0-255).
+int brideRed = 113;
+int brideGreen = 104;
+int brideBlue = 85;
+
 // altar.a
 // 96 × 192
 // | 015 |
@@ -79,6 +84,12 @@ void setup() {
     }
 
     setCalibCoordinatesArgValue();
+
+    if (isBride()) {
+        fullScreen(P2D);
+        frameRate(1);
+        return;
+    }
     
     String videoFile = "";
 
@@ -130,6 +141,20 @@ void draw() {
         int currentTime = millis();
         int elapsedTime = currentTime - startTime;
         println("\n\n --- start up time (ms) = " + elapsedTime + "\n\n");
+    }
+
+    if (isBride()) {
+        background(0);
+        noStroke();
+        fill(brideRed, brideGreen, brideBlue);
+        // Same six module positions as altar-c2.
+        rect(lm_134.x, lm_134.y, lmu_w, lmu_h);
+        rect(lm_167.x, lm_167.y, lmu_w, lmu_h);
+        rect(lm_164.x, lm_164.y, lmu_w, lmu_h);
+        rect(lm_161.x, lm_161.y, lmu_w, lmu_h);
+        rect(lm_015.x, lm_015.y, lmu_w, lmu_h);
+        rect(lm_182.x, lm_182.y, lmu_w, lmu_h);
+        return;
     }
 
     background(135, 206, 235);// BLUE (0, 0, 255);
@@ -389,6 +414,10 @@ boolean isAltarC() {
 boolean isAltarC2() {
     boolean res = inArgExists("altar-c2");
     return res;
+}
+
+boolean isBride() {
+    return inArgExists("bride");
 }
 
 //Detect the operating system and set the folder path accordingly
