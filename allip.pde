@@ -32,9 +32,9 @@ int lmu_h = 96;
 // (162, 162, 162) - a medium gray color, was a bit hurtful to the eyes
 // (84, 84, 84) - a darker gray color, is very pleasent
 // (192, 192, 192) - is "Silver in standard CSS colours"
-int brideRed = 192;
-int brideGreen = 192;
-int brideBlue = 192;
+int brideRed = 142;
+int brideGreen = 142;
+int brideBlue = 142;
 
 // altar.a
 // 96 × 192
