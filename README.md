@@ -10,7 +10,24 @@ In this repository you will find the "operating system" of *constempllation no. 
 
 **altar** is responsiblle of video live mapping to two 50x50 cm / 96x96 pxls / 5pp LED modules installed one over the other. It uses [processing](https://processing.org/download) to achive this task.
 
-To show a solid RGB color on the six `altar-c2` module positions, edit `brideRed`, `brideGreen`, and `brideBlue` near the top of `allip.pde`, then run `task images:play:with-processing ALTAR_MODE=bride`. This mode does not load a video. The area outside the modules is black.
+To show a solid RGB color on the six `altar-c2` module positions, edit `brideRed`, `brideGreen`, and `brideBlue` near the top of `allip.pde`. This mode does not load a video. The area outside the modules is black.
+
+### Start bride on the image Pi
+
+From the Mac, start it remotely with:
+
+```bash
+task images:run:remotely ALTAR_MODE=bride
+```
+
+The image Pi at `172.20.10.4` uses Wayfire and automatically logs in to the graphical desktop as `altar`. To start bride after every boot, add the following section to `/home/altar/.config/wayfire.ini` on the Pi (or add only the `bride` line if an `[autostart]` section already exists):
+
+```ini
+[autostart]
+bride = /usr/local/bin/task -d /home/altar/repos/allip images:play:with-processing ALTAR_MODE=bride
+```
+
+The Pi's checkout must contain the bride code. After rebooting, check that it started with `ssh altar@172.20.10.4 'tmux ls'`; the session should be named `pr_session`. The current `images:play:with-processing` task also runs `sudo logrotate`, and the `altar` user has passwordless sudo on this Pi.
 
 **altar-voices** is responsiblle of audio, sent to a DAC connected to an apmlfier which has it's outputs connected to [25mm-exciter](https://www.daytonaudio.com/product/1177/daex25fhe-4-framed-high-efficiency-25mm-exciter) which are insalled on foam boards.
 
