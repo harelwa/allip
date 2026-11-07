@@ -28,13 +28,15 @@ int lmu_w = 96;
 int lmu_h = 96;
 
 // Solid color for bride mode. Edit these RGB values (0-255).
-// era's chick RGB values (142, 142, 142) - a light gray color
+// (142, 142, 142) - era's chick RGB values a light gray color
 // (162, 162, 162) - a medium gray color, was a bit hurtful to the eyes
 // (84, 84, 84) - a darker gray color, is very pleasent
 // (192, 192, 192) - is "Silver in standard CSS colours"
+// (243, 0, 228) - is a bright magenta color, from Sweetheart
 int brideRed = 142;
 int brideGreen = 142;
 int brideBlue = 142;
+float brideIntensity = 1.0; // 0.0 = off, 1.0 = original
 
 // altar.a
 // 96 × 192
@@ -150,7 +152,11 @@ void draw() {
     if (isBride()) {
         background(0);
         noStroke();
-        fill(brideRed, brideGreen, brideBlue);
+        fill(
+            brideRed * brideIntensity,
+            brideGreen * brideIntensity,
+            brideBlue * brideIntensity
+        );
         // Same six module positions as altar-c2.
         rect(lm_134.x, lm_134.y, lmu_w, lmu_h);
         rect(lm_167.x, lm_167.y, lmu_w, lmu_h);
