@@ -27,7 +27,7 @@ The image Pi at `172.20.10.4` uses Wayfire and automatically logs in to the grap
 bride = /usr/local/bin/task -d /home/altar/repos/allip images:play:with-processing ALTAR_MODE=bride
 ```
 
-The Pi's checkout must contain the bride code. After rebooting, check that it started with `ssh altar@172.20.10.4 'tmux ls'`; the session should be named `pr_session`. The current `images:play:with-processing` task also runs `sudo logrotate`, and the `altar` user has passwordless sudo on this Pi.
+The Pi's checkout must contain the bride code. From the Mac, run `task restart:altar:remotely` to reboot it. Once it is back online, check that bride started with `ssh altar@172.20.10.4 'tmux ls'`; the session should be named `pr_session`. The current `images:play:with-processing` task also runs `sudo logrotate`, and the `altar` user has passwordless sudo on this Pi.
 
 **altar-voices** is responsiblle of audio, sent to a DAC connected to an apmlfier which has it's outputs connected to [25mm-exciter](https://www.daytonaudio.com/product/1177/daex25fhe-4-framed-high-efficiency-25mm-exciter) which are insalled on foam boards.
 

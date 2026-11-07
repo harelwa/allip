@@ -59,6 +59,11 @@ tasks:
         ssh -o ConnectTimeout=2 altar@altar.local 'task -d /home/altar/repos/allip images:kill'
     desc: _
 
+  restart:altar:remotely:
+    desc: Reboot the image Pi
+    cmds:
+      - ssh -o BatchMode=yes -o ConnectTimeout=5 altar@{{.ALTAR_IP}} 'sudo -n reboot'
+
   shutdown:altar-voices:remotely:
     cmds:
       - ssh -o ConnectTimeout=2 altar@altar-voices.local 'sudo shutdown -h now' || true
