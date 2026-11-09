@@ -33,10 +33,10 @@ int lmu_h = 96;
 // (84, 84, 84) - a darker gray color, is very pleasent
 // (192, 192, 192) - is "Silver in standard CSS colours"
 // (243, 0, 228) - is a bright magenta color, from Sweetheart
-int brideRed = 142;
-int brideGreen = 142;
-int brideBlue = 142;
-float brideIntensity = 1.0; // 0.0 = off, 1.0 = original
+int brideRed = 187;
+int brideGreen = 207;
+int brideBlue = 255;
+float brideIntensity = 1.1; // 0.0 = off, 1.0 = original
 
 // altar.a
 // 96 × 192
